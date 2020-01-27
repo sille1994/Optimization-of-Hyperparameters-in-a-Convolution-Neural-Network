@@ -1,6 +1,6 @@
 # CMSE802_spring2020_hyperparamterop
 
-# Overview
+# Overview #
 
 In the last couple of years, there has been a major shift in training and using
 convolutional neural networks as a second opinion in medical detection and
@@ -19,7 +19,7 @@ while training the model. Thus, retraining the model is no longer necessary.
 The optimization algorithm will be used in a future convolution neural network 
 trained on medical data.  
 
-#Program Description
+# Program Description #
 
 In this course, a "dummy" convolution neural network will be used together with 
 the MNIST data set for training. The convolutional neural network is written by 
