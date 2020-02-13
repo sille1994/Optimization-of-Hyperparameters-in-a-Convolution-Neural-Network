@@ -2,7 +2,11 @@
 # coding: utf-8
 import os
 import argparse
-import ax
+import torch
+import numpy as np
+#from ax.plot.contour import plot_contour
+#from ax.service.managed_loop import optimize
+#from ax.utils.notebook.plotting import render
 from botorch.models import SingleTaskGP
 from gpytorch.constraints import GreaterThan
 from gpytorch.mlls import ExactMarginalLogLikelihood
@@ -20,16 +24,36 @@ parser = argparse.ArgumentParser(description='Set values for the search space fo
 #parser.add_argument('-HMM', default=0.9, type=float, help='Higher bound of the momentum')
 #parser.add_argument('-Opt' , default='SGD', type=str, help='Choose the optimizer: Stochastic gradient descent (SGD) and Adam optimization algorithm (Adam)')
 
-args = 0
 search_space = 0
-
+args = {}
+args["Llr"] =10^(-5)
+args["Hlr"] =10^(-1)
+args["LWD"] =4e-4
+args["HWD"] =4e-2
+args["LMM"] =0.5
+args["HMM"] =0.9
 
 # Setting up a search space
 
-def SetUpTheSearchSpace(search_space,args):
+def SetUpTheSearchSpace(args):
     """ This fucntion is suppose to make the searching space. """
+    parameters=[
+                {"name": "lr", "type": "range", "bounds": [args.Llr, args.Hlr]},
+                {"name": "weight", "type": "range", "bounds": [args.LWD, args.HWD] },
+                {"name": "momentum", "type": "range", "bounds": [args.LMM, args.HMM]},
+                ],
+    return parameters
 
-    return search_space
+def optimizeNetwork(parameters,train_evaluate):
+    """ Finding the best parameters for the network"""
+#    best_parameters, values, experiment, model = optimize(parameters, evaluation_function=train_evaluate,objective_name='accuracy',)
+#   return best_parameters, values, experiment, model
+
+
+def plottingConture(model):
+    """Plotting conture of the search space to see what gives the best results"""
+#    return render(plot_contour(model=model, param_x='lr', param_y='momentum', metric_name='accuracy'))
+
 
 
 def BO(Ypred,Ytruth,args):

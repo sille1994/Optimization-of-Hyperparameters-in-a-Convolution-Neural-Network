@@ -1055,6 +1055,8 @@ table {
   <ul>
     <li class="mono"><a href="#Bo.BO">BO</a></li>
     <li class="mono"><a href="#Bo.SetUpTheSearchSpace">SetUpTheSearchSpace</a></li>
+    <li class="mono"><a href="#Bo.optimizeNetwork">optimizeNetwork</a></li>
+    <li class="mono"><a href="#Bo.plottingConture">plottingConture</a></li>
   </ul>
 
     </li>
@@ -1080,7 +1082,11 @@ table {
 <span class="c1"># coding: utf-8</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">argparse</span>
-<span class="kn">import</span> <span class="nn">ax</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="c1">#from ax.plot.contour import plot_contour</span>
+<span class="c1">#from ax.service.managed_loop import optimize</span>
+<span class="c1">#from ax.utils.notebook.plotting import render</span>
 <span class="kn">from</span> <span class="nn">botorch.models</span> <span class="kn">import</span> <span class="n">SingleTaskGP</span>
 <span class="kn">from</span> <span class="nn">gpytorch.constraints</span> <span class="kn">import</span> <span class="n">GreaterThan</span>
 <span class="kn">from</span> <span class="nn">gpytorch.mlls</span> <span class="kn">import</span> <span class="n">ExactMarginalLogLikelihood</span>
@@ -1098,16 +1104,36 @@ table {
 <span class="c1">#parser.add_argument(&#39;-HMM&#39;, default=0.9, type=float, help=&#39;Higher bound of the momentum&#39;)</span>
 <span class="c1">#parser.add_argument(&#39;-Opt&#39; , default=&#39;SGD&#39;, type=str, help=&#39;Choose the optimizer: Stochastic gradient descent (SGD) and Adam optimization algorithm (Adam)&#39;)</span>
 
-<span class="n">args</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="n">search_space</span> <span class="o">=</span> <span class="mi">0</span>
-
+<span class="n">args</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">args</span><span class="p">[</span><span class="s2">&quot;Llr&quot;</span><span class="p">]</span> <span class="o">=</span><span class="mi">10</span><span class="o">^</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">args</span><span class="p">[</span><span class="s2">&quot;Hlr&quot;</span><span class="p">]</span> <span class="o">=</span><span class="mi">10</span><span class="o">^</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">args</span><span class="p">[</span><span class="s2">&quot;LWD&quot;</span><span class="p">]</span> <span class="o">=</span><span class="mf">4e-4</span>
+<span class="n">args</span><span class="p">[</span><span class="s2">&quot;HWD&quot;</span><span class="p">]</span> <span class="o">=</span><span class="mf">4e-2</span>
+<span class="n">args</span><span class="p">[</span><span class="s2">&quot;LMM&quot;</span><span class="p">]</span> <span class="o">=</span><span class="mf">0.5</span>
+<span class="n">args</span><span class="p">[</span><span class="s2">&quot;HMM&quot;</span><span class="p">]</span> <span class="o">=</span><span class="mf">0.9</span>
 
 <span class="c1"># Setting up a search space</span>
 
-<span class="k">def</span> <span class="nf">SetUpTheSearchSpace</span><span class="p">(</span><span class="n">search_space</span><span class="p">,</span><span class="n">args</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">SetUpTheSearchSpace</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; This fucntion is suppose to make the searching space. &quot;&quot;&quot;</span>
+    <span class="n">parameters</span><span class="o">=</span><span class="p">[</span>
+                <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;lr&quot;</span><span class="p">,</span> <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;range&quot;</span><span class="p">,</span> <span class="s2">&quot;bounds&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">args</span><span class="o">.</span><span class="n">Llr</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">Hlr</span><span class="p">]},</span>
+                <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;weight&quot;</span><span class="p">,</span> <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;range&quot;</span><span class="p">,</span> <span class="s2">&quot;bounds&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">args</span><span class="o">.</span><span class="n">LWD</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">HWD</span><span class="p">]</span> <span class="p">},</span>
+                <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;momentum&quot;</span><span class="p">,</span> <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;range&quot;</span><span class="p">,</span> <span class="s2">&quot;bounds&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">args</span><span class="o">.</span><span class="n">LMM</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">HMM</span><span class="p">]},</span>
+                <span class="p">],</span>
+    <span class="k">return</span> <span class="n">parameters</span>
 
-    <span class="k">return</span> <span class="n">search_space</span>
+<span class="k">def</span> <span class="nf">optimizeNetwork</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span><span class="n">train_evaluate</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Finding the best parameters for the network&quot;&quot;&quot;</span>
+<span class="c1">#    best_parameters, values, experiment, model = optimize(parameters, evaluation_function=train_evaluate,objective_name=&#39;accuracy&#39;,)</span>
+<span class="c1">#   return best_parameters, values, experiment, model</span>
+
+
+<span class="k">def</span> <span class="nf">plottingConture</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Plotting conture of the search space to see what gives the best results&quot;&quot;&quot;</span>
+<span class="c1">#    return render(plot_contour(model=model, param_x=&#39;lr&#39;, param_y=&#39;momentum&#39;, metric_name=&#39;accuracy&#39;))</span>
+
 
 
 <span class="k">def</span> <span class="nf">BO</span><span class="p">(</span><span class="n">Ypred</span><span class="p">,</span><span class="n">Ytruth</span><span class="p">,</span><span class="n">args</span><span class="p">):</span>
@@ -1201,7 +1227,7 @@ table {
       
   <div class="item">
     <div class="name def" id="Bo.SetUpTheSearchSpace">
-    <p>def <span class="ident">SetUpTheSearchSpace</span>(</p><p>search_space, args)</p>
+    <p>def <span class="ident">SetUpTheSearchSpace</span>(</p><p>args)</p>
     </div>
     
 
@@ -1211,10 +1237,58 @@ table {
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-Bo.SetUpTheSearchSpace', this);">Show source &equiv;</a></p>
   <div id="source-Bo.SetUpTheSearchSpace" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">SetUpTheSearchSpace</span><span class="p">(</span><span class="n">search_space</span><span class="p">,</span><span class="n">args</span><span class="p">):</span>
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">SetUpTheSearchSpace</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; This fucntion is suppose to make the searching space. &quot;&quot;&quot;</span>
+    <span class="n">parameters</span><span class="o">=</span><span class="p">[</span>
+                <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;lr&quot;</span><span class="p">,</span> <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;range&quot;</span><span class="p">,</span> <span class="s2">&quot;bounds&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">args</span><span class="o">.</span><span class="n">Llr</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">Hlr</span><span class="p">]},</span>
+                <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;weight&quot;</span><span class="p">,</span> <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;range&quot;</span><span class="p">,</span> <span class="s2">&quot;bounds&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">args</span><span class="o">.</span><span class="n">LWD</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">HWD</span><span class="p">]</span> <span class="p">},</span>
+                <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;momentum&quot;</span><span class="p">,</span> <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;range&quot;</span><span class="p">,</span> <span class="s2">&quot;bounds&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">args</span><span class="o">.</span><span class="n">LMM</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">HMM</span><span class="p">]},</span>
+                <span class="p">],</span>
+    <span class="k">return</span> <span class="n">parameters</span>
+</pre></div>
 
-    <span class="k">return</span> <span class="n">search_space</span>
+  </div>
+</div>
+
+  </div>
+  
+      
+  <div class="item">
+    <div class="name def" id="Bo.optimizeNetwork">
+    <p>def <span class="ident">optimizeNetwork</span>(</p><p>parameters, train_evaluate)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Finding the best parameters for the network</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-Bo.optimizeNetwork', this);">Show source &equiv;</a></p>
+  <div id="source-Bo.optimizeNetwork" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">optimizeNetwork</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span><span class="n">train_evaluate</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Finding the best parameters for the network&quot;&quot;&quot;</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+      
+  <div class="item">
+    <div class="name def" id="Bo.plottingConture">
+    <p>def <span class="ident">plottingConture</span>(</p><p>model)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Plotting conture of the search space to see what gives the best results</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-Bo.plottingConture', this);">Show source &equiv;</a></p>
+  <div id="source-Bo.plottingConture" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">plottingConture</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Plotting conture of the search space to see what gives the best results&quot;&quot;&quot;</span>
 </pre></div>
 
   </div>
