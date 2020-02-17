@@ -23,24 +23,24 @@ import torchvision
 
 
 # Set values for the seach space
-parser = argparse.ArgumentParser(description='Set values for the search space for the hyperparameters')
-parser.add_argument("-Llr", default=10^(-5), type=float, help='Lower bound of the learning rate')
-parser.add_argument("-Hlr", default=10^(-1), type=float, help='Higher bound of the learning rate')
-parser.add_argument("-WD" , default= False, type=float, help='Is weight decay used in the optimize algorithm?')
-parser.add_argument("-LWD", default=4e-4, type=float, help='Lower bound of the weight decay')
-parser.add_argument("-HWD", default=4e-2, type=float, help='Higher bound of the weight decay')
-parser.add_argument("-MM" , default= False, type=float, help='Is momentum used in the optimize algorithm?')
-parser.add_argument("-LMM", default=0.5, type=float, help='Lower bound of the momentum')
-parser.add_argument("-HMM", default=0.9, type=float, help='Higher bound of the momentum')
-parser.add_argument("-Opt", default='SGD', type=str, help='Choose the optimizer: Stochastic gradient descent (SGD) and Adam optimization algorithm (Adam)')
-args = parser.parse_args()
-#args = {}
-#args["Llr"] =10^(-5)
-#args["Hlr"] =10^(-1)
-#args["LWD"] =4e-4
-#args["HWD"] =4e-2
-#args["LMM"] =0.5
-#args["HMM"] =0.9
+#parser = argparse.ArgumentParser(description='Set values for the search space for the hyperparameters')
+#parser.add_argument("-Llr", default=10^(-5), type=float, help='Lower bound of the learning rate')
+#parser.add_argument("-Hlr", default=10^(-1), type=float, help='Higher bound of the learning rate')
+#parser.add_argument("-WD" , default= False, type=float, help='Is weight decay used in the optimize algorithm?')
+#parser.add_argument("-LWD", default=4e-4, type=float, help='Lower bound of the weight decay')
+#parser.add_argument("-HWD", default=4e-2, type=float, help='Higher bound of the weight decay')
+#parser.add_argument("-MM" , default= False, type=float, help='Is momentum used in the optimize algorithm?')
+#parser.add_argument("-LMM", default=0.5, type=float, help='Lower bound of the momentum')
+#parser.add_argument("-HMM", default=0.9, type=float, help='Higher bound of the momentum')
+#parser.add_argument("-Opt", default='SGD', type=str, help='Choose the optimizer: Stochastic gradient descent (SGD) and Adam optimization algorithm (Adam)')
+#args = parser.parse_args()
+args = {}
+args["Llr"] =10^(-5)
+args["Hlr"] =10^(-1)
+args["LWD"] =4e-4
+args["HWD"] =4e-2
+args["LMM"] =0.5
+args["HMM"] =0.9
 
 
 
@@ -96,7 +96,7 @@ def test_data_set(data):
     if "torch" not in str(type(data)):
         raise ValueError('Make sure the data is type torch')
     else:
-        continue
+        pass
 
 
 
@@ -119,7 +119,7 @@ def train_evaluate(parameterization):
 def optimizeNetwork(parameters,train_evaluate):
     """ Finding the best parameters for the network"""
     best_parameters, values, experiment, model = optimize(parameters, evaluation_function=train_evaluate,objective_name='accuracy',)
-   return best_parameters,values,experiment,model
+    return best_parameters, values, experiment, model
 
 
 def plottingConture(model):
@@ -128,7 +128,7 @@ def plottingConture(model):
 
 
 
-def BO(Ypred,Ytruth,args):
+def BO(Ypred,Ytruth):
     """ Calculating the surrogate function and the aqcuisition function """
 
     # Initialize the Gaussian Likelihood
