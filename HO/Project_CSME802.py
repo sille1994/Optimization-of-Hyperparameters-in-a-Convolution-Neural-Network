@@ -3,12 +3,13 @@
 
 # 1. Loading 
 
-# In[3]:
+# In[1]:
 
 
-get_ipython().run_line_magic('matplotlib', 'inline')
 import matplotlib.pyplot as plt
 import numpy as np
+from pylab import *
+import random
 
 import torch
 import torchvision
@@ -19,11 +20,22 @@ import torch.optim as optim
 
 from torch.autograd import Variable
 
+from itertools import accumulate
+from typing import Dict, List, Optional, Tuple
+from ax.plot.contour import plot_contour
+from ax.plot.trace import optimization_trace_single_method
+from ax.service.managed_loop import optimize
+from ax.utils.notebook.plotting import render, init_notebook_plotting
+
+
 from ray import tune
 from ray.tune.examples.mnist_pytorch import get_data_loaders, ConvNet, train, test
 
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning, module="torch.nn.functional")
 
-# In[ ]:
+
+# In[2]:
 
 
 get_ipython().system('if [ ! -f mnist_cluttered_60x60_6distortions.npz ]; then wget -N https://www.dropbox.com/s/rvvo1vtjjrryr7e/mnist_cluttered_60x60_6distortions.npz; else echo "mnist_cluttered_60x60_6distortions.npz already downloaded"; fi')
@@ -31,7 +43,7 @@ get_ipython().system('if [ ! -f mnist_cluttered_60x60_6distortions.npz ]; then w
 
 # 2. Load data and minding to be smaller. 
 
-# In[3]:
+# In[25]:
 
 
 NUM_EPOCHS = 50
@@ -41,10 +53,20 @@ NUM_CLASSES = 10
 mnist_cluttered = "mnist_cluttered_60x60_6distortions.npz"
 
 
-# In[4]:
+# In[26]:
 
 
 def load_data():
+    
+    """
+    Load the npz-map and sort the data in a train, valid and test datset.
+    
+    Args:
+        None
+    Returns:
+        dict: A dictionary with the data sorted.
+    """
+    
     data = np.load(mnist_cluttered)
     X_train, y_train = data['x_train'], np.argmax(data['y_train'], axis=-1)
     X_valid, y_valid = data['x_valid'], np.argmax(data['y_valid'], axis=-1)
@@ -90,18 +112,12 @@ plt.show()
 
 # 3. Defining the Convolutional Neural Network
 
-# In[ ]:
-
-
-
-
-
-# In[6]:
+# In[5]:
 
 
 class Net(nn.Module):
     
-    def __init__(self, input_channels, input_height, input_width, num_classes, num_zoom=3):
+    def __init__(self, input_channels = 1, input_height =60, input_width = 60, num_classes = 10 , num_zoom=3):
         super(Net, self).__init__()
         self.input_channels = input_channels
         self.input_height = input_height
@@ -205,14 +221,14 @@ class Net(nn.Module):
         return F.log_softmax(x, dim=1), l_trans1
 
 
-net = Net(1, DIM, DIM, NUM_CLASSES)
+net = Net()
 if torch.cuda.is_available():
     print('##converting network to cuda-enabled')
     net.cuda()
 print(net)
 
 
-# In[7]:
+# In[6]:
 
 
 # test forward pass on dummy data
@@ -224,13 +240,7 @@ output = net(x)
 print([x.size() for x in output])
 
 
-# In[8]:
-
-
-
-
-
-# In[9]:
+# In[7]:
 
 
 def get_variable(x):
@@ -246,20 +256,250 @@ def get_numpy(x):
     return x.data.numpy()
 
 
-# In[10]:
+# In[13]:
 
 
 
 
-def train_epoch(X, y,):
+def train_BO(
+    net: torch.nn.Module,
+    Input: data['X_train'], 
+    Label: data['y_train'],
+    parameters: Dict[str, float],
+) -> nn.Module:
+    
+    """
+    Train the network on provided data set to find the optimzed hyperparamter settings.
+
+    Args:
+        net: initialized neural network
+        Input: The image
+        Label: Th label to the respective image
+        parameters: dictionary containing parameters to be passed to the optimizer.
+            - lr: default (0.001)
+            - momentum: default (0.0)
+            - weight_decay: default (0.0)
+            - num_epochs: default (1)
+    Returns:
+        nn.Module: trained Network.
+    """
+    # Define the data
+    X = data['X_train']
+    y = data['y_train']
+    
+    # Initilize network
+    net.train()
+    
+    # Define the hyperparameters
+    
+    criterion = nn.NLLLoss(reduction="sum")
+    optimizer = optim.SGD(
+                net.parameters(),
+                lr=parameters.get("lr", 0.001),
+                momentum=parameters.get("momentum", 0.0),
+                weight_decay=parameters.get("weight_decay", 0.0),
+                )
+    scheduler = optim.lr_scheduler.StepLR(
+                optimizer,
+                step_size=int(parameters.get("step_size", 60)),
+                gamma=parameters.get("gamma", 1.0),  # default is no learning rate decay
+                )
+    num_epochs = parameters.get("num_epochs", 1)
+    
+    # Get the number of samples and batches before starting trainging the network
     num_samples = X.shape[0]
     num_batches = int(np.ceil(num_samples / float(BATCH_SIZE)))
+    
+    for _ in range(num_epochs):
+        for i in range(num_batches):
+            idx = range(i*BATCH_SIZE, np.minimum((i+1)*BATCH_SIZE, num_samples))
+            X_batch_tr = get_variable(Variable(torch.from_numpy(X[idx])))
+            y_batch_tr = get_variable(Variable(torch.from_numpy(y[idx]).long()))
+
+            optimizer.zero_grad()
+            output, _ = net(X_batch_tr)
+            batch_loss = criterion(output, y_batch_tr)
+        
+            batch_loss.backward()
+            optimizer.step()
+            scheduler.step()
+            
+            
+    return net
+
+
+def eval_BO(
+    net: torch.nn.Module,
+    Input: data['X_valid'], 
+    Label: data['y_valid'],
+) -> float:
+    
+    """
+    Compute classification accuracy on provided dataset to find the optimzed hyperparamter settings.
+
+    Args:
+        net: trained neural network
+        Input: The image
+        Label: Th label to the respective image
+    Returns:
+        float: classification accuracy
+    """
+    # Define the data
+    X = data['X_valid']
+    y = data['y_valid']
+
+    # Pre-locating memory
+    pred_list = []
+    
+    # Get the number of samples and batches before testing the network
+    num_samples = X.shape[0]
+    num_batches = int(np.ceil(num_samples / float(BATCH_SIZE)))
+    net.eval()
+
+    with torch.no_grad():
+
+        for i in range(num_batches):
+        
+            idx = range(i*BATCH_SIZE, np.minimum((i+1)*BATCH_SIZE, num_samples))
+            X_batch_val = get_variable(Variable(torch.from_numpy(X[idx])))
+            output, transformation = net(X_batch_val)
+            pred_list.append(get_numpy(output))
+        
+    # Calculating the accuracy
+    preds = np.concatenate(pred_list, axis=0)
+    preds = np.argmax(preds, axis=-1)
+    acc = np.mean(preds == y)
+
+    return acc
+
+
+# In[14]:
+
+
+def evaluate_Hyperparameters(parameterization):
+    """
+    Train and evaluate the network to find the best parameters 
+    Args:
+        parameterization: The hyperparameters that should be evaluated
+    Returns:
+        float: classification accuracy
+    """
+    net = Net()
+    net = train_BO(net=net, Input=data['X_train'], Label = data['y_train'], parameters=parameterization,)
+    
+    return eval_BO(net=net,Input=data['X_valid'], Label = data['y_valid'],)
+        
+
+        
+
+
+# In[15]:
+
+
+# Saving the network so far, so it can be used when the optimization is done.
+NET = Net
+
+# Starting the first optimization
+best_parameters, values, experiment, model = optimize(
+    parameters=[
+                {"name": "lr", "type": "range", "bounds": [1e-5, 0.1], "log_scale": False},
+                {"name": "momentum", "type": "range", "bounds": [0.2, 0.6]},
+                ],
+    evaluation_function=evaluate_Hyperparameters,
+    objective_name='accuracy',
+)
+
+
+# In[16]:
+
+
+
+# Saving the results from the optimization
+BE = []
+ME = [] 
+CO = []
+
+means, covariances = values
+
+BE.append(best_parameters)
+ME.append(means)
+CO.append(covariances)
+
+# Printing the results of the hyperparamter optimization
+print(best_parameters)
+print(means, covariances)
+
+# Findin the best hyperparameter for training the network
+data1 = experiment.fetch_data()
+df = data1.df
+best_arm_name = df.arm_name[df['mean'] == df['mean'].max()].values[0]
+best_arm = experiment.arms_by_name[best_arm_name]
+best_arm
+
+
+# In[17]:
+
+
+render(plot_contour(model=model, param_x='lr', param_y='momentum', metric_name='accuracy'))
+
+
+# In[18]:
+
+
+best_objectives = np.array([[trial.objective_mean*100 for trial in experiment.trials.values()]])
+best_objective_plot = optimization_trace_single_method(
+    y=np.maximum.accumulate(best_objectives, axis=1),
+    title="Model performance vs. # of iterations",
+    ylabel="Classification Accuracy, %",
+)
+render(best_objective_plot)
+
+
+# In[28]:
+
+
+
+
+def train_epoch(net: torch.nn.Module, Input: data, Label: data, Param: Dict[str, float],) -> float:
+    
+    """
+    Train the network with the optimized hyperparamters.
+
+    Args:
+        Input: The image
+        Label: The label to the respective image
+        Param: Parameters the best paramters for training the network
+    Returns:
+        float: the mean cost and the classification accuracy
+    """
+    # Define the data
+    X = data['X_valid']
+    y = data['y_valid']
+    parameters=best_arm.parameters,
+
+    
+    # Initilize network
+    net.train()
+    
+  # Define the hyperparameters    
+    optimizer = optim.SGD(
+                        net.parameters(),
+                        lr=parameters.get("lr", 0.001),
+                        momentum=parameters.get("momentum", 0.0),
+                        weight_decay=parameters.get("weight_decay", 0.0),
+                        )
+    
+    
+    
+    # Pre-locating memory
     costs = []
     correct = 0
-    net.train()
+    
+    # Get the number of samples and batches before testing the network  
+    num_samples = X.shape[0]
+    num_batches = int(np.ceil(num_samples / float(BATCH_SIZE)))
+    
     for i in range(num_batches):
-        if i % 10 == 0:
-            print("{}, ".format(i), end='')
         idx = range(i*BATCH_SIZE, np.minimum((i+1)*BATCH_SIZE, num_samples))
         X_batch_tr = get_variable(Variable(torch.from_numpy(X[idx])))
         y_batch_tr = get_variable(Variable(torch.from_numpy(y[idx]).long()))
@@ -274,71 +514,107 @@ def train_epoch(X, y,):
         costs.append(get_numpy(batch_loss))
         preds = np.argmax(get_numpy(output), axis=-1)
         correct += np.sum(get_numpy(y_batch_tr) == preds)
-    print()
     return np.mean(costs), correct / float(num_samples)
 
-def eval_epoch(X, y):
+def eval_epoch(net: torch.nn.Module, Input: data,  Label: data,) -> float:
+    
+    """
+    Compute classification accuracy on provided dataset to the optimized network.
+
+    Args:
+        Input: The image
+        Label: Th label to the respective image
+    Returns:
+        float: classification accuracy
+    """
+    # Define the data
+    X = data['X_valid']
+    y = data['y_valid']
+    
+    # Pre-locating memory
+    pred_list = []
+    
+    # Get the number of samples and batches before testing the network
     num_samples = X.shape[0]
     num_batches = int(np.ceil(num_samples / float(BATCH_SIZE)))
-    pred_list = []
-    transform_list = []
     net.eval()
+    
     for i in range(num_batches):
-        if i % 10 == 0:
-            print("{}, ".format(i), end='')
         idx = range(i*BATCH_SIZE, np.minimum((i+1)*BATCH_SIZE, num_samples))
         X_batch_val = get_variable(Variable(torch.from_numpy(X[idx])))
-        output, transformation = net(X_batch_val)
+        output, _ = net(X_batch_val)
         pred_list.append(get_numpy(output))
-        transform_list.append(get_numpy(transformation))
-    transform_eval = np.concatenate(transform_list, axis=0)
+        
+    # Calculating the accuracy
     preds = np.concatenate(pred_list, axis=0)
     preds = np.argmax(preds, axis=-1)
     acc = np.mean(preds == y)
-    print()
-    return acc, transform_eval
+    return acc
 
 
-# In[11]:
+# In[29]:
 
+
+# Using the old network again with the new hyperparamter-setting
+Net = NET
+
+# Saving the results from the optimization
+valid_accs, train_accs, test_accs = [], [], []
+criterion = nn.NLLLoss(reduction="sum")
 
 n = 0
-
-
-# In[ ]:
-
-
-valid_accs, train_accs, test_accs = [], [], []
-
-analysis = tune.run(
-    train_epoch, config={"lr": tune.grid_search([0.001, 0.01, 0.1])})
-
 while n < NUM_EPOCHS:
     n += 1
     try:
         print("Epoch %d:" % n)
-        print('train: ')
-        criterion = nn.CrossEntropyLoss()
-        optimizer = optim.Adam(net.parameters(),lr=config["lr"])
-        train_cost, train_acc = train_epoch(data['X_train'], data['y_train'])
-        tune.track.log(mean_accuracy=train_acc)
+        train_cost, train_acc = train_epoch(net=net, Input=data['X_train'], Label=data['y_train'], Param = best_arm.parameters,)
 
-        print('valid ')
-        valid_acc, valid_trainsform = eval_epoch(data['X_valid'], data['y_valid'])
-        print('test ')
-        test_acc, test_transform = eval_epoch(data['X_test'], data['y_test'])
+        tune.track.log(mean_accuracy=train_acc)
+        valid_acc = eval_epoch(net=net, Input=data['X_valid'], Label=data['y_valid'],)
+        test_acc = eval_epoch(net=net, Input=data['X_test'], Label=data['y_test'],)
         valid_accs += [valid_acc]
         test_accs += [test_acc]
         train_accs += [train_acc]
 
         print("train cost {0:.2}, train acc {1:.2}, val acc {2:.2}, test acc {3:.2}".format(
                 train_cost, train_acc, valid_acc, test_acc))
+    
+        """ For every N new hyperparameters will be calculated for training the network"""
+        if n % 5 == 0:            
+            # Saving the network trained network so far, so it can be used when the optimization is done.
+            NET = net
+            
+            # Findinf the best hypperparameter again.
+            best_parameters, values, experiment, model = optimize(
+                    parameters=[
+                                {"name": "lr", "type": "range", "bounds": [1e-6, 1e-5], "log_scale": True},
+                                {"name": "momentum", "type": "range", "bounds": [0.2, 0.6]},
+                                ],
+                    evaluation_function=evaluate_Hyperparameters,
+                    objective_name='accuracy',
+                    )
+            
+            
+            # Getting the best hyperparameters
+            data = experiment.fetch_data()
+            df = data.df
+            best_arm_name = df.arm_name[df['mean'] == df['mean'].max()].values[0]
+            best_arm = experiment.arms_by_name[best_arm_name]
+
+            # Saving the results from the optimization
+            BE.append(best_parameters)
+            ME.append(means)
+            CO.append(CO)
+            
+            # Using the old network again with the new hyperparamter-setting
+            net = NET
+            
     except KeyboardInterrupt:
         print('\nKeyboardInterrupt')
         break
 
 
-# In[ ]:
+# In[24]:
 
 
 print("Best config: ", analysis.get_best_config(metric="mean_accuracy"))
@@ -361,9 +637,6 @@ plt.show()
 # In[ ]:
 
 
-get_ipython().run_line_magic('matplotlib', 'inline')
-from pylab import *
-import random
 
 images, labels = data['X_test'], data['y_test']
 num_samples = images.shape[0]
