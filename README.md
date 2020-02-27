@@ -37,3 +37,11 @@ chosen values of hyperparameters for each epoch will also be made. For proof
 of concept, the network will be run e.g. 10 times with and without the 
 optimization algorithm. The accuracy will be saved and inspected visually for 
 significant differences between the two methods.
+
+
+# Running the programe #
+
+To run the unit test; Open the terminal and make sure you are in the "Hyperparameter Optimization"- folder. Then run: "python test_Project_CSME802.py"
+
+
+
