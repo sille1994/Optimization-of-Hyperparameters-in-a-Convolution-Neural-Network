@@ -39,6 +39,7 @@ optimization algorithm. The accuracy will be saved and inspected visually for
 significant differences between the two methods.
 
 Original Webside: https://github.com/DeepLearningDTU/02456-deep-learning
+
 Updated to Pytorch: https://github.com/DeepLearningDTU/02456-deep-learning-with-PyTorch
 
 # Bayesian Optimization #
