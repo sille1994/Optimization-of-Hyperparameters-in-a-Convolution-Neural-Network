@@ -60,9 +60,19 @@ coverage.xml
 
 # Scrapy stuff:
 .scrapy
+.DS_Store
 
 # Sphinx documentation
 docs/_build/
+doc/.gitkeep
+doc/.DS_Store
+
+doc/images/.gitkeep
+
+Hyperparameter_Optimization/.DS_Store
+Hyperparameter_Optimization/.gitkeep
+Hyperparameter_Optimization/.ipynb_checkpoints
+
 
 # PyBuilder
 target/
@@ -97,6 +107,8 @@ celerybeat-schedule
 
 # mkdocs documentation
 /site
+Models/.ipynb_checkpoints
+
 
 # mypy
 .mypy_cache/
