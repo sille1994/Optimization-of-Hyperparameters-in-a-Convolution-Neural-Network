@@ -76,6 +76,8 @@ conda install botorch -c pytorch -c gpytorch
 
 pip3/pip install ax-platform
 
+
+
 Install Mac:
 
 conda install pytorch torchvision -c pytorch
@@ -86,7 +88,9 @@ conda install matplotlib==3.1.0
 
 conda install botorch -c pytorch -c gpytorch
 
-pip3/pip install ax-platform
+pip3/pip install ax-platform 
+
+
 
 Install Windows:
 
@@ -102,6 +106,8 @@ pip3/pip install ax-platform
 
 Torch and Torchvison should be respectively the version  1.3.1
 and 0.4.2.
+
+
 
 
 To run the unit test;
