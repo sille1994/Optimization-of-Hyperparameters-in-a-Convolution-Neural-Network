@@ -65,24 +65,39 @@ Citing: https://mlconf.com/blog/lets-talk-bayesian-optimization/
 # Running the programe #
 
 Install Linux: 
+
 conda install pytorch torchvision cpuonly -c pytorch
+
 conda install numpy==1.16.1
+
 conda install matplotlib==3.1.0
+
 conda install botorch -c pytorch -c gpytorch
+
 pip3/pip install ax-platform
 
 Install Mac:
+
 conda install pytorch torchvision -c pytorch
+
 conda install numpy==1.16.1
+
 conda install matplotlib==3.1.0
+
 conda install botorch -c pytorch -c gpytorch
+
 pip3/pip install ax-platform
 
 Install Windows:
+
 conda install pytorch torchvision cpuonly -c pytorch
+
 conda install numpy==1.16.1
+
 conda install matplotlib==3.1.0
+
 conda install botorch -c pytorch -c gpytorch
+
 pip3/pip install ax-platform
 
 Torch and Torchvison should be respectively the version  1.3.1
