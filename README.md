@@ -38,10 +38,61 @@ of concept, the network will be run e.g. 10 times with and without the
 optimization algorithm. The accuracy will be saved and inspected visually for 
 significant differences between the two methods.
 
+Webside: https://github.com/DeepLearningDTU/02456-deep-learning
+
+# Bayesian Optimization #
+
+Bayesian Optimization (BO) is a methods to maximize the evaluating of "black 
+box" functions, this could be Machine Learning or Deep Learning algorithms, 
+without having acces to these algorithms. Thus, BO takes the algorithm and test 
+it at a sequence of test points to determine the optimal values for e.g. 
+hyperparamters.
+
+This is done by approximations, since we cannot solve the problem analyticly. 
+The approximation is a surregate model (a probabilistic model) based om the 
+results with the associated hyperparameter. Here, a Gaussian model is fitted to 
+the outcome. This will give us a mean and vairance. An acquisition function is 
+then used to look at different trade-offs of picking known maximas and explore 
+uncertain locations in the hyperparamter space. These steps are iterated, thus 
+we should get a better and better approximation until the maximum number of 
+ietrations is met. The best results can then be found with the respictive 
+hyperparameter(s).
+
+References
+Citing: https://mlconf.com/blog/lets-talk-bayesian-optimization/
+
 
 # Running the programe #
 
-To run the unit test; Open the terminal and make sure you are in the "Hyperparameter Optimization"- folder. Then run: "python test_Project_CSME802.py"
+Install Linux: 
+conda install pytorch torchvision cpuonly -c pytorch
+conda install numpy==1.16.1
+conda install matplotlib==3.1.0
+conda install botorch -c pytorch -c gpytorch
+pip3/pip install ax-platform
+
+Install Mac:
+conda install pytorch torchvision -c pytorch
+conda install numpy==1.16.1
+conda install matplotlib==3.1.0
+conda install botorch -c pytorch -c gpytorch
+pip3/pip install ax-platform
+
+Install Windows:
+conda install pytorch torchvision cpuonly -c pytorch
+conda install numpy==1.16.1
+conda install matplotlib==3.1.0
+conda install botorch -c pytorch -c gpytorch
+pip3/pip install ax-platform
+
+Torch and Torchvison should be respectively the version  1.3.1
+and 0.4.2.
+
+
+To run the unit test;
+Open the terminal and make sure you are in the 
+"Hyperparameter Optimization"- folder. 
+Then run: "python test_Project_CSME802.py"
 
 
 
