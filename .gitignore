@@ -72,6 +72,8 @@ doc/images/.gitkeep
 Hyperparameter_Optimization/.DS_Store
 Hyperparameter_Optimization/.gitkeep
 Hyperparameter_Optimization/.ipynb_checkpoints
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
 
 
 # PyBuilder
