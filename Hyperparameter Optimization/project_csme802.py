@@ -24,6 +24,9 @@ import torchvision
 import numpy as np
 import matplotlib.pyplot as plt
 
+import argparse
+parser = argparse.ArgumentParser()
+parser.parse_args()
 #get_ipython().run_line_magic('matplotlib', 'inline')
 #warnings.filterwarnings("ignore", category=UserWarning, module="torch.nn.functional")
 
