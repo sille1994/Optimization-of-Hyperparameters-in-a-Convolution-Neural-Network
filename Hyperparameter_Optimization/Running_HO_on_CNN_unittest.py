@@ -19,7 +19,6 @@
 import warnings
 from typing import Dict #, List
 import random
-from ax.service.managed_loop import optimize
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
@@ -79,25 +78,6 @@ def load_data():
 
 
 DATA = load_data()
-
-IDX = 0
-CANVAS = np.zeros((DIM*NUM_CLASSES, NUM_CLASSES*DIM))
-for I in range(NUM_CLASSES):
-    for J in range(NUM_CLASSES):
-        CANVAS[I*DIM:(I+1)*DIM, J*DIM:(J+1) * DIM] = DATA['x_train'][IDX].reshape((DIM, DIM))
-        IDX += 1
-plt.figure(figsize=(10, 10))
-plt.imshow(CANVAS, cmap='gray')
-plt.title('Cluttered handwritten digits')
-plt.axis('off')
-plt.show()
-
-
-# In[3]:
-
-
-
-
 # 3. Defining the Convolutional Neural Network
 
 class Net(nn.Module):
@@ -312,67 +292,9 @@ def evaluate_hyperparameters(parameterization):
             label_picture=DATA['y_valid'],)
 
 
-# In[ ]:
-BEST_PARAMETERS, VALUES, EXPERIMENT, MODEL = optimize(parameters=[{"name": "lr", "type": "range",\
-    "bounds": [1e-6, 0.4], "log_scale": True},], evaluation_function=evaluate_hyperparameters,\
-    objective_name='accuracy',)
-
-
-# In[ ]:
-
-
-
-
-# Saving the results from the optimization
-BE = []
-ME = []
-CO = []
-
-MEANS, COVARIANCES = VALUES
-
-BE.append(BEST_PARAMETERS)
-ME.append(MEANS)
-CO.append(COVARIANCES)
-
-# Printing the results of the hyperparamter optimization
-print(BEST_PARAMETERS)
-print(MEANS, COVARIANCES)
-
-# Findin the best hyperparameter for training the network
-
-DATA1 = EXPERIMENT.fetch_data()
-DF = DATA1.df
-BEST_ARM_NAME = DF.arm_name[DF['mean'] == DF['mean'].max()].values[0]
-BEST_ARM = EXPERIMENT.arms_by_name[BEST_ARM_NAME]
-BEST_ARM
-
-
-# In[ ]:
-
-
-# class best_arm1:
-#    parameters = {}
-#    parameters["lr"] = 0.001
-#    parameters["momentum"] = 0.001
-#    parameters["weight_decay"] = 0.001
-#best_arm = best_arm1()
-
-
-#render(plot_contour(model=MODEL, param_x='lr',
-#                    param_y='weight_decay', metric_name='accuracy'))
-
-
-#BEST_OBJECTIVES = np.array([[trial.objective_mean*100 for trial in EXPERIMENT.trials.values()]])
-#BEST_OBJECTIVE_PLOT = optimization_trace_single_method(y=np.maximum.accumulate(\
-#    BEST_OBJECTIVES, axis=1), title="Model performance vs. # of iterations",\
-#    ylabel="Classification Accuracy, %",)
-
-#render(BEST_OBJECTIVE_PLOT)
-# In[5]:
-
 random.seed()
 
-LR = BEST_ARM.parameters.get("lr", 0.001)
+LR = 0.001
 
 net = Net()
 net = Net()
@@ -454,42 +376,3 @@ def eval_epoch(input_picture: DATA, label_picture: DATA,) -> float:
 #    pass
     return accuracy_results
 
-
-# In[ ]:
-
-
-
-# Saving the results from the optimization
-VALID_ACCS, TRAIN_ACCS, TEST_ACCS, TRAIN_COSTS = [], [], [], []
-
-N = 0
-while N < NUM_EPOCHS:
-    N += 1
-    try:
-        print("Epoch %d:" % N)
-
-        TRAIN_COST, TRAIN_ACC = train_epoch(input_picture=DATA['x_train'],\
-                                            label_picture=DATA['y_train'],)
-        VALID_ACC = eval_epoch(input_picture=DATA['x_valid'], label_picture=DATA['y_valid'],)
-        TEST_ACC = eval_epoch(input_picture=DATA['x_test'], label_picture=DATA['y_test'],)
-        VALID_ACCS += [VALID_ACC]
-        TEST_ACCS += [TEST_ACC]
-        TRAIN_ACCS += [TRAIN_ACC]
-        TRAIN_COSTS += [TRAIN_COST]
-        print("train cost {0:.2}, train acc {1:.2}, val acc {2:.2}, test acc {3:.2}".format(
-            TRAIN_COST, TRAIN_ACC, VALID_ACC, TEST_ACC))
-    except KeyboardInterrupt:
-        print('\nKeyboardInterrupt')
-        break
-
-
-# In[ ]:
-plt.figure(figsize=(9, 9))
-plt.plot(1-np.array(TRAIN_ACCS), label='Training Error')
-plt.plot(1-np.array(VALID_ACCS), label='Validation Error')
-plt.plot(1-np.array(TEST_ACCS), label='Test Error')
-
-plt.legend(fontsize=20)
-plt.xlabel('Epoch', fontsize=20)
-plt.ylabel('Error', fontsize=20)
-plt.show()

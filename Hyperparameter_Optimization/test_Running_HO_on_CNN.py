@@ -5,7 +5,7 @@
 
 import unittest
 import numpy as np
-import project_csme802
+import Running_HO_on_CNN_unittest
 
 
 class Parameters:
@@ -20,31 +20,26 @@ class TestCode(unittest.TestCase):
     """ Testing the code """
     def test_load_data(self):
         """ Testing the load_data-function """
-        data = project_csme802.load_data()
-
+        data = Running_HO_on_CNN_unittest.load_data()
         self.assertEqual(data['x_train'].shape, (50000, 1, 60, 60))
         self.assertEqual(data['x_valid'].shape, (10000, 1, 60, 60))
         self.assertEqual(data['x_test'].shape, (10000, 1, 60, 60))
 
     def test_eval_bayesian_optimization(self):
         """ Testing the eval_bayesian_optimization-function """
-        net = project_csme802.Net()
-        data = project_csme802.load_data()
-        accuracy = project_csme802.eval_bayesian_optimization(
-            net=net, input_picture=data['x_valid'], label_picture=data['y_valid'],)
-
-        self.assertEqual(type(accuracy), np.float64)
-        self.assertEqual(accuracy.shape, ())
+        net = Running_HO_on_CNN_unittest.Net()
+        data = Running_HO_on_CNN_unittest.load_data()
+        accuracy = Running_HO_on_CNN_unittest.eval_bayesian_optimization(net=net,\
+                    input_picture=data['x_valid'], label_picture=data['y_valid'],)
+        self.assertEqual((type(accuracy)), float)
 
     def test_train_epoch(self):
         """ Testing the train_epoch-function """
-        net = project_csme802.Net()
-        data = project_csme802.load_data()
+        net = Running_HO_on_CNN_unittest.Net()
+        data = Running_HO_on_CNN_unittest.load_data()
         best_arm = Parameters()
-        cost_mean, accuracy = project_csme802.train_epoch(net=net,\
-            input_picture=data['X_train'], label_picture=data['y_train'],\
-            parameters=best_arm.parameters,)
-
+        cost_mean, accuracy = Running_HO_on_CNN_unittest.train_epoch(input_picture=data['x_train'],\
+                                                                     label_picture=data['y_train'],)
         self.assertEqual(type(accuracy), np.float64)
         self.assertEqual(type(cost_mean), np.float32)
         self.assertEqual(accuracy.shape, ())
@@ -52,11 +47,10 @@ class TestCode(unittest.TestCase):
 
     def test_eval_epoch(self):
         """ Testing the eval_epoch-function """
-        net = project_csme802.Net()
-        data = project_csme802.load_data()
-        accuracy = project_csme802.eval_epoch(
-            net=net, input_picture=data['X_valid'], label_picture=data['y_valid'],)
-
+        net = Running_HO_on_CNN_unittest.Net()
+        data = Running_HO_on_CNN_unittest.load_data()
+        accuracy = Running_HO_on_CNN_unittest.eval_epoch(input_picture=data['x_valid'],\
+                                                         label_picture=data['y_valid'],)
         self.assertEqual(type(accuracy), np.float64)
         self.assertEqual(accuracy.shape, ())
 
