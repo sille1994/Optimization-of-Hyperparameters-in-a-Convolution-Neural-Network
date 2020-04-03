@@ -96,7 +96,7 @@ rm -rf ./envs
 To run the unit test;
 Open the terminal and make sure you are in the 
 "Hyperparameter_Optimization"- folder. 
-Then run: "test_Running_HO_on_CNN.py"
+Then run: "python test_Running_HO_on_CNN.py"
 
 # #
 To run pylint:
