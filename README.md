@@ -78,16 +78,34 @@ conda install botorch -c pytorch -c gpytorch
 
 pip install ax-platform
 
-
 Torch and Torchvison should be respectively the version  1.3.1
 and 0.4.2.
 
+
+Or 
+
+conda env create --prefix ./envs --file requirements.yml
+conda activate ./envs
+
+To delete the environment: 
+conda deactivate
+rm -rf ./envs
 
 
 To run the unit test;
 Open the terminal and make sure you are in the 
 "Hyperparameter_Optimization"- folder. 
-Then run: "python test_Project_CSME802.py"
+Then run: "test_Running_HO_on_CNN.py"
+
+
+To run pylint:
+Pylint has troubles with Torch. There is no
+solution, see [](https://github.com/pytorch/pytorch/issues/701), thus
+--disable=no-member is added.
+Open the terminal and make sure you are in the 
+"cmse802_spring2020_hyperparamterop"- folder. 
+Ten run: pylint --disable=no-member Hyperparameter_Optimization
+
 
 
 
