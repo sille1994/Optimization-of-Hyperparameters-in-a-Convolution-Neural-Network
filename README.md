@@ -91,16 +91,17 @@ To delete the environment:
 conda deactivate
 rm -rf ./envs
 
+# #
 
 To run the unit test;
 Open the terminal and make sure you are in the 
 "Hyperparameter_Optimization"- folder. 
 Then run: "test_Running_HO_on_CNN.py"
 
-
+# #
 To run pylint:
 Pylint has troubles with Torch. There is no
-solution, see [](https://github.com/pytorch/pytorch/issues/701), thus
+[solution](https://github.com/pytorch/pytorch/issues/701), thus
 --disable=no-member is added.
 Open the terminal and make sure you are in the 
 "cmse802_spring2020_hyperparamterop"- folder. 
