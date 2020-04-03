@@ -1,29 +1,23 @@
-make2dot:	make2dot.o y.tab.o lex.yy.o
-	g++ make2dot.o y.tab.o lex.yy.o  -o make2dot 
+clean:
+	rm .gitkeep -f
+	rm .DS_Store -f
 
-lex.yy.c: make2dot.l y.tab.h
-	flex make2dot.l
+init:
+	conda env create --prefix ./envs --file environment.yml
 
-lex.yy.o: lex.yy.c
-	gcc -c lex.yy.c
+term:
+	rm -rf ./envs
 
-y.tab.c y.tab.h:  make2dot.y
-	bison --yacc --defines make2dot.y
+doc:
+	pdoc --html --html-dir ./doc --overwrite ./Hyperparameter_Optimization/Running_HO_on_CNN_doc.py
+	cd Hyperparameter_Optimization
+	rm __pycache__ -f
 
-y.tab.o: y.tab.c y.tab.h
-	gcc -c y.tab.c
+lint:
+	pylint --disable=no-member Hyperparameter_Optimization
 
-make2dot.o: make2dot.cc y.tab.h
-	g++ -c make2dot.cc
+test:
+	python ./Hyperparameter_Optimization/test_Running_HO_on_CNN.py
 
-test: test.png
-
-test.png: test.dot
-	dot -Tpng test.dot -o test.png
-
-test.dot:  make2dot makefile
-	./make2dot makefile > test.dot
-
-clean: 
-	rm make2dot *.o y.* lex.*
-
+runcode:
+	python ./Hyperparameter_Optimization/Running_HO_on_CNN.py

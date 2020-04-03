@@ -29,16 +29,12 @@ from torch.autograd import Variable
 warnings.filterwarnings("ignore", category=UserWarning, module="torch.nn.functional")
 
 
-# In[2]:
-
-
-
 # 2. Load data and minding to be smaller.
 NUM_EPOCHS = 15
 BATCH_SIZE = 256
 DIM = 60
 NUM_CLASSES = 10
-MNIST_C = "mnist_cluttered_60x60_6distortions.npz"
+MNIST_C = "./Hyperparameter_Optimization/mnist_cluttered_60x60_6distortions.npz"
 
 
 def load_data():
@@ -164,10 +160,6 @@ class Net(nn.Module):
 
 print(Net())
 
-
-# In[4]:
-
-
 NET = Net()
 
 # test forward pass on dummy data
@@ -192,11 +184,6 @@ def get_numpy(x_picture):
         return x_picture.cpu().data.numpy()
 
     return x_picture.data.numpy()
-
-
-# In[ ]:
-
-
 
 def train_bayesian_optimization(net: torch.nn.Module, input_picture: DATA,\
         label_picture: DATA, parameters: Dict[str, float],) -> nn.Module:
@@ -272,11 +259,6 @@ def eval_bayesian_optimization(net: torch.nn.Module, input_picture: DATA,\
     # Calculating the accuracy
 #    pass
     return float(correct/num_batches)
-
-
-# In[ ]:
-
-
 
 def evaluate_hyperparameters(parameterization):
     """ Train and evaluate the network to find the best parameters

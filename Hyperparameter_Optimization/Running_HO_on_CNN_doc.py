@@ -19,7 +19,7 @@
 import warnings
 from typing import Dict #, List
 import random
-from ax.service.managed_loop import optimize
+#from ax.service.managed_loop import optimize
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
@@ -28,6 +28,10 @@ import torch.nn.functional as F
 import torch.nn as nn
 from torch.autograd import Variable
 warnings.filterwarnings("ignore", category=UserWarning, module="torch.nn.functional")
+
+
+# In[2]:
+
 
 
 # 2. Load data and minding to be smaller.
@@ -174,6 +178,7 @@ class Net(nn.Module):
 
 
 print(Net())
+
 NET = Net()
 
 # test forward pass on dummy data
@@ -240,9 +245,9 @@ def train_bayesian_optimization(net: torch.nn.Module, input_picture: DATA,\
             loss.backward()
             optimizer.step()
             scheduler.step()
-#    pass
-    return net
 
+#    return net
+    pass
 
 def eval_bayesian_optimization(net: torch.nn.Module, input_picture: DATA,\
         label_picture: DATA, ) -> float:
@@ -272,8 +277,11 @@ def eval_bayesian_optimization(net: torch.nn.Module, input_picture: DATA,\
             _, predicted = torch.max(output.data, 1)
             correct += (predicted == y_batch_val).float().mean()
     # Calculating the accuracy
-#    pass
-    return float(correct/num_batches)
+
+#    return float(correct/num_batches)
+    pass
+
+
 
 def evaluate_hyperparameters(parameterization):
     """ Train and evaluate the network to find the best parameters
@@ -282,46 +290,45 @@ def evaluate_hyperparameters(parameterization):
     Returns:
         float: classification accuracy """
     net = Net()
-    net = train_bayesian_optimization(net=net, input_picture=DATA['x_train'],\
-            label_picture=DATA['y_train'], parameters=parameterization,)
-#    pass
-    return eval_bayesian_optimization(net=net, input_picture=DATA['x_valid'],\
-            label_picture=DATA['y_valid'],)
+    net = train_bayesian_optimization(net=net, input_picture=DATA['x_train'],label_picture=DATA['y_train'], parameters=parameterization,)
+    pass
+#    return eval_bayesian_optimization(net=net, input_picture=DATA['x_valid'],label_picture=DATA['y_valid'],)
 
-BEST_PARAMETERS, VALUES, EXPERIMENT, MODEL = optimize(parameters=[{"name": "lr", "type": "range",\
-    "bounds": [1e-6, 0.4], "log_scale": True},], evaluation_function=evaluate_hyperparameters,\
-    objective_name='accuracy',)
+
+    
+#BEST_PARAMETERS, VALUES, EXPERIMENT, MODEL = optimize(parameters=[{"name": "lr", "type": "range", "bounds": [1e-6, 0.4], "log_scale": True},], evaluation_function=evaluate_hyperparameters, objective_name='accuracy',)
+
 
 # Saving the results from the optimization
 BE = []
 ME = []
 CO = []
 
-MEANS, COVARIANCES = VALUES
+#MEANS, COVARIANCES = VALUES
 
-BE.append(BEST_PARAMETERS)
-ME.append(MEANS)
-CO.append(COVARIANCES)
+#BE.append(BEST_PARAMETERS)
+#ME.append(MEANS)
+#CO.append(COVARIANCES)
 
 # Printing the results of the hyperparamter optimization
-print(BEST_PARAMETERS)
-print(MEANS, COVARIANCES)
+#print(BEST_PARAMETERS)
+#print(MEANS, COVARIANCES)
 
 # Findin the best hyperparameter for training the network
 
-DATA1 = EXPERIMENT.fetch_data()
-DF = DATA1.df
-BEST_ARM_NAME = DF.arm_name[DF['mean'] == DF['mean'].max()].values[0]
-BEST_ARM = EXPERIMENT.arms_by_name[BEST_ARM_NAME]
-BEST_ARM
+#DATA1 = EXPERIMENT.fetch_data()
+#DF = DATA1.df
+#BEST_ARM_NAME = DF.arm_name[DF['mean'] == DF['mean'].max()].values[0]
+#BEST_ARM = EXPERIMENT.arms_by_name[BEST_ARM_NAME]
+#BEST_ARM
 
 
-# class best_arm1:
-#    parameters = {}
-#    parameters["lr"] = 0.001
-#    parameters["momentum"] = 0.001
-#    parameters["weight_decay"] = 0.001
-#best_arm = best_arm1()
+class best_arm1:
+    parameters = {}
+    parameters["lr"] = 0.001
+    parameters["momentum"] = 0.001
+    parameters["weight_decay"] = 0.001
+BEST_ARM = best_arm1()
 
 
 #render(plot_contour(model=MODEL, param_x='lr',
@@ -382,9 +389,9 @@ def train_epoch(input_picture: DATA, label_picture: DATA,) -> float:
         costs.append(get_numpy(batch_loss))
         preds = np.argmax(get_numpy(output), axis=-1)
         correct += np.sum(get_numpy(y_batch_tr) == preds)
-    #   pass
-    return np.mean(costs), correct / float(num_samples)
 
+#    return np.mean(costs), correct / float(num_samples)
+    pass
 
 def eval_epoch(input_picture: DATA, label_picture: DATA,) -> float:
     """ Compute classification accuracy on provided dataset to the optimized network.
@@ -416,14 +423,14 @@ def eval_epoch(input_picture: DATA, label_picture: DATA,) -> float:
     preds_result = np.argmax(preds_result, axis=-1)
     accuracy_results = np.mean(preds_result == y_valid)
 
-#    pass
-    return accuracy_results
 
+#    return accuracy_results
+    pass
 
 # Saving the results from the optimization
 VALID_ACCS, TRAIN_ACCS, TEST_ACCS, TRAIN_COSTS = [], [], [], []
 
-N = 0
+N = 20
 while N < NUM_EPOCHS:
     N += 1
     try:
@@ -442,6 +449,7 @@ while N < NUM_EPOCHS:
     except KeyboardInterrupt:
         print('\nKeyboardInterrupt')
         break
+
 
 plt.figure(figsize=(9, 9))
 plt.plot(1-np.array(TRAIN_ACCS), label='Training Error')
