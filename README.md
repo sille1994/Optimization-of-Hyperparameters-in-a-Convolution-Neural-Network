@@ -86,7 +86,7 @@ and 0.4.2.
 
 To run the unit test;
 Open the terminal and make sure you are in the 
-"Hyperparameter Optimization"- folder. 
+"Hyperparameter_Optimization"- folder. 
 Then run: "python test_Project_CSME802.py"
 
 
