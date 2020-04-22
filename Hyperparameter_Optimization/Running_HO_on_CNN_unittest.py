@@ -17,7 +17,7 @@
 # import warnings
 # from itertools import accumulate
 import warnings
-from typing import Dict #, List
+from typing import Dict, List
 import random
 import matplotlib.pyplot as plt
 import numpy as np
@@ -170,7 +170,6 @@ if torch.cuda.is_available():
 OUTPUT = NET(TEST_EXAMPLE)
 print([TEST_EXAMPLE.size() for TEST_EXAMPLE in OUTPUT])
 
-
 def get_variable(x_picture):
     """ Converts tensors to cuda, if available. """
     if torch.cuda.is_available():
@@ -185,6 +184,7 @@ def get_numpy(x_picture):
 
     return x_picture.data.numpy()
 
+
 def train_bayesian_optimization(net: torch.nn.Module, input_picture: DATA,\
         label_picture: DATA, parameters: Dict[str, float],) -> nn.Module:
     """ Train the network on provided data set to find the optimzed hyperparamter settings.
@@ -198,15 +198,24 @@ def train_bayesian_optimization(net: torch.nn.Module, input_picture: DATA,\
             - weight_decay: default (0.0)
             - num_epochs: default (1)
     Returns:
-        nn.Module: trained Network. """
+        nn.Module: trained Network
+        float: The mean cost
+        float: Accuracy """
+
     # Define the data
     x_train = input_picture
     y_train = label_picture
     # Initilize network
     net.train()
+    # Pre-locating memory
+    costs = []
+    correct = 0
     # Define the hyperparameters
     criteron = F.cross_entropy
+    
+    #Hyperparameter optimization
     optimizer = optim.Adam(net.parameters(), lr=parameters.get("lr", 0.001))
+    
     scheduler = optim.lr_scheduler.StepLR(optimizer,\
                 step_size=int(parameters.get("step_size", 20)),\
                 gamma=parameters.get("gamma", 1.0),)
@@ -225,8 +234,12 @@ def train_bayesian_optimization(net: torch.nn.Module, input_picture: DATA,\
             loss.backward()
             optimizer.step()
             scheduler.step()
-#    pass
-    return net
+            costs.append(get_numpy(loss))
+            preds = np.argmax(get_numpy(output), axis=-1)
+            correct += np.sum(get_numpy(y_batch_tr) == preds)
+    mean_cost = np.mean(costs)
+    accuracy = correct / float(num_samples)
+    return net, mean_cost, accuracy
 
 
 def eval_bayesian_optimization(net: torch.nn.Module, input_picture: DATA,\
@@ -257,7 +270,6 @@ def eval_bayesian_optimization(net: torch.nn.Module, input_picture: DATA,\
             _, predicted = torch.max(output.data, 1)
             correct += (predicted == y_batch_val).float().mean()
     # Calculating the accuracy
-#    pass
     return float(correct/num_batches)
 
 def evaluate_hyperparameters(parameterization):
@@ -267,94 +279,8 @@ def evaluate_hyperparameters(parameterization):
     Returns:
         float: classification accuracy """
     net = Net()
-    net = train_bayesian_optimization(net=net, input_picture=DATA['x_train'],\
+    net, _, _ = train_bayesian_optimization(net=net, input_picture=DATA['x_train'],\
             label_picture=DATA['y_train'], parameters=parameterization,)
-#    pass
+
     return eval_bayesian_optimization(net=net, input_picture=DATA['x_valid'],\
             label_picture=DATA['y_valid'],)
-
-
-random.seed()
-
-LR = 0.001
-
-net = Net()
-net = Net()
-
-criterion = nn.CrossEntropyLoss()
-optimizer = optim.Adam(net.parameters(), lr=LR)
-
-def train_epoch(input_picture: DATA, label_picture: DATA,) -> float:
-    """ Train the network with the optimized hyperparamters.
-    Args:
-        Input: The image
-        Label: The label to the respective image
-    Returns:
-        float: the mean cost and the classification accuracy """
-    # Define the data
-    x_valid = input_picture
-    y_valid = label_picture
-
-    # Initilize network
-    net.train()
-
-    # Pre-locating memory
-    costs = []
-    correct = 0
-
-    # Get the number of samples and batches before testing the network
-    num_samples = x_valid.shape[0]
-    num_batches = int(np.ceil(num_samples / float(BATCH_SIZE)))
-
-    for i in range(num_batches):
-        idx = range(i*BATCH_SIZE, np.minimum((i+1) * BATCH_SIZE, num_samples))
-        x_batch_tr = get_variable(Variable(torch.from_numpy(x_valid[idx])))
-        y_batch_tr = get_variable(Variable(torch.from_numpy(y_valid[idx]).long()))
-
-        optimizer.zero_grad()
-        output, _ = net(x_batch_tr)
-        batch_loss = criterion(output, y_batch_tr)
-
-        batch_loss.backward()
-        optimizer.step()
-
-        costs.append(get_numpy(batch_loss))
-        preds = np.argmax(get_numpy(output), axis=-1)
-        correct += np.sum(get_numpy(y_batch_tr) == preds)
-    #   pass
-    return np.mean(costs), correct / float(num_samples)
-
-
-def eval_epoch(input_picture: DATA, label_picture: DATA,) -> float:
-    """ Compute classification accuracy on provided dataset to the optimized network.
-
-    Args:
-        Input: The image
-        Label: Th label to the respective image
-    Returns:
-        float: classification accuracy """
-    # Define the data
-    x_valid = input_picture
-    y_valid = label_picture
-
-    # Pre-locating memory
-    pred_list = []
-
-    # Get the number of samples and batches before testing the network
-    num_samples = x_valid.shape[0]
-    num_batches = int(np.ceil(num_samples / float(BATCH_SIZE)))
-    net.eval()
-    for i in range(num_batches):
-        idx = range(i*BATCH_SIZE, np.minimum((i+1) * BATCH_SIZE, num_samples))
-        x_batch_val = get_variable(Variable(torch.from_numpy(x_valid[idx])))
-        output, _ = net(x_batch_val)
-        pred_list.append(get_numpy(output))
-
-    # Calculating the accuracy
-    preds_result = np.concatenate(pred_list, axis=0)
-    preds_result = np.argmax(preds_result, axis=-1)
-    accuracy_results = np.mean(preds_result == y_valid)
-
-#    pass
-    return accuracy_results
-

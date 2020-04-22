@@ -5,6 +5,7 @@
 
 import unittest
 import numpy as np
+from typing import Dict, List
 import Running_HO_on_CNN_unittest
 
 
@@ -14,7 +15,9 @@ class Parameters:
     parameters["lr"] = 0.001
     parameters["momentum"] = 0.001
     parameters["weight_decay"] = 0.001
-
+    parameters["step_size"] = 20
+    parameters["gamma"] = 1.0
+    parameters["num_epochs"] = 1
 
 class TestCode(unittest.TestCase):
     """ Testing the code """
@@ -33,26 +36,19 @@ class TestCode(unittest.TestCase):
                     input_picture=data['x_valid'], label_picture=data['y_valid'],)
         self.assertEqual((type(accuracy)), float)
 
-    def test_train_epoch(self):
+    def test_train_bayesian_optimization(self):
         """ Testing the train_epoch-function """
         net = Running_HO_on_CNN_unittest.Net()
         data = Running_HO_on_CNN_unittest.load_data()
         best_arm = Parameters()
-        cost_mean, accuracy = Running_HO_on_CNN_unittest.train_epoch(input_picture=data['x_train'],\
-                                                                     label_picture=data['y_train'],)
+        _, cost_mean, accuracy = Running_HO_on_CNN_unittest.train_bayesian_optimization(net=net,\
+                                            input_picture=data['x_train'],\
+                                            label_picture=data['y_train'],\
+                                            parameters=best_arm.parameters,)
         self.assertEqual(type(accuracy), np.float64)
         self.assertEqual(type(cost_mean), np.float32)
         self.assertEqual(accuracy.shape, ())
         self.assertEqual(cost_mean.shape, ())
-
-    def test_eval_epoch(self):
-        """ Testing the eval_epoch-function """
-        net = Running_HO_on_CNN_unittest.Net()
-        data = Running_HO_on_CNN_unittest.load_data()
-        accuracy = Running_HO_on_CNN_unittest.eval_epoch(input_picture=data['x_valid'],\
-                                                         label_picture=data['y_valid'],)
-        self.assertEqual(type(accuracy), np.float64)
-        self.assertEqual(accuracy.shape, ())
 
 
 if __name__ == "__main__":

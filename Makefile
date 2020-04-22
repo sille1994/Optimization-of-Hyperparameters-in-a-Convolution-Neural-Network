@@ -9,9 +9,7 @@ term:
 	rm -rf ./envs
 
 doc:
-	pdoc --html --html-dir ./doc --overwrite ./Hyperparameter_Optimization/Running_HO_on_CNN_doc.py
-	cd Hyperparameter_Optimization
-	rm __pycache__ -f
+	pdoc --html --html-dir ./doc/ --overwrite ./Hyperparameter_Optimization/Running_HO_on_CNN_doc.py
 
 lint:
 	pylint --disable=no-member Hyperparameter_Optimization

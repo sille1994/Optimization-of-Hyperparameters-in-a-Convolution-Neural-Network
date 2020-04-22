@@ -1045,17 +1045,13 @@ table {
       
   <ul>
     <li class="mono"><a href="#Running_HO_on_CNN_doc.BATCH_SIZE">BATCH_SIZE</a></li>
-    <li class="mono"><a href="#Running_HO_on_CNN_doc.BE">BE</a></li>
     <li class="mono"><a href="#Running_HO_on_CNN_doc.BEST_ARM">BEST_ARM</a></li>
     <li class="mono"><a href="#Running_HO_on_CNN_doc.CANVAS">CANVAS</a></li>
-    <li class="mono"><a href="#Running_HO_on_CNN_doc.CO">CO</a></li>
     <li class="mono"><a href="#Running_HO_on_CNN_doc.DATA">DATA</a></li>
     <li class="mono"><a href="#Running_HO_on_CNN_doc.DIM">DIM</a></li>
     <li class="mono"><a href="#Running_HO_on_CNN_doc.I">I</a></li>
     <li class="mono"><a href="#Running_HO_on_CNN_doc.IDX">IDX</a></li>
     <li class="mono"><a href="#Running_HO_on_CNN_doc.J">J</a></li>
-    <li class="mono"><a href="#Running_HO_on_CNN_doc.LR">LR</a></li>
-    <li class="mono"><a href="#Running_HO_on_CNN_doc.ME">ME</a></li>
     <li class="mono"><a href="#Running_HO_on_CNN_doc.MNIST_C">MNIST_C</a></li>
     <li class="mono"><a href="#Running_HO_on_CNN_doc.N">N</a></li>
     <li class="mono"><a href="#Running_HO_on_CNN_doc.NET">NET</a></li>
@@ -1067,9 +1063,6 @@ table {
     <li class="mono"><a href="#Running_HO_on_CNN_doc.TRAIN_ACCS">TRAIN_ACCS</a></li>
     <li class="mono"><a href="#Running_HO_on_CNN_doc.TRAIN_COSTS">TRAIN_COSTS</a></li>
     <li class="mono"><a href="#Running_HO_on_CNN_doc.VALID_ACCS">VALID_ACCS</a></li>
-    <li class="mono"><a href="#Running_HO_on_CNN_doc.criterion">criterion</a></li>
-    <li class="mono"><a href="#Running_HO_on_CNN_doc.net">net</a></li>
-    <li class="mono"><a href="#Running_HO_on_CNN_doc.optimizer">optimizer</a></li>
   </ul>
 
     </li>
@@ -1078,13 +1071,11 @@ table {
       
   <ul>
     <li class="mono"><a href="#Running_HO_on_CNN_doc.eval_bayesian_optimization">eval_bayesian_optimization</a></li>
-    <li class="mono"><a href="#Running_HO_on_CNN_doc.eval_epoch">eval_epoch</a></li>
     <li class="mono"><a href="#Running_HO_on_CNN_doc.evaluate_hyperparameters">evaluate_hyperparameters</a></li>
     <li class="mono"><a href="#Running_HO_on_CNN_doc.get_numpy">get_numpy</a></li>
     <li class="mono"><a href="#Running_HO_on_CNN_doc.get_variable">get_variable</a></li>
     <li class="mono"><a href="#Running_HO_on_CNN_doc.load_data">load_data</a></li>
     <li class="mono"><a href="#Running_HO_on_CNN_doc.train_bayesian_optimization">train_bayesian_optimization</a></li>
-    <li class="mono"><a href="#Running_HO_on_CNN_doc.train_epoch">train_epoch</a></li>
   </ul>
 
     </li>
@@ -1133,7 +1124,7 @@ table {
 
         </li>
         <li class="mono">
-        <span class="class_name"><a href="#Running_HO_on_CNN_doc.best_arm1">best_arm1</a></span>
+        <span class="class_name"><a href="#Running_HO_on_CNN_doc.Parameters">Parameters</a></span>
         
         </li>
       </ul>
@@ -1170,7 +1161,7 @@ to fit the optimization problem.</p>
 <span class="c1">#!/usr/bin/env python</span>
 <span class="c1"># coding: utf-8</span>
 
-<span class="c1"># 1. Loading</span>
+<span class="c1"># Loading modules</span>
 
 
 <span class="c1"># import warnings</span>
@@ -1189,21 +1180,16 @@ to fit the optimization problem.</p>
 <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">UserWarning</span><span class="p">,</span> <span class="n">module</span><span class="o">=</span><span class="s2">&quot;torch.nn.functional&quot;</span><span class="p">)</span>
 
 
-<span class="c1"># In[2]:</span>
-
-
-
-<span class="c1"># 2. Load data and minding to be smaller.</span>
-<span class="n">NUM_EPOCHS</span> <span class="o">=</span> <span class="mi">15</span>
+<span class="c1"># Load data and minding to be smaller.</span>
+<span class="n">NUM_EPOCHS</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="n">BATCH_SIZE</span> <span class="o">=</span> <span class="mi">256</span>
 <span class="n">DIM</span> <span class="o">=</span> <span class="mi">60</span>
 <span class="n">NUM_CLASSES</span> <span class="o">=</span> <span class="mi">10</span>
 <span class="n">MNIST_C</span> <span class="o">=</span> <span class="s2">&quot;./Hyperparameter_Optimization/mnist_cluttered_60x60_6distortions.npz&quot;</span>
 
-
+<span class="c1"># Load data function</span>
 <span class="k">def</span> <span class="nf">load_data</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot; Load the npz-map and sort the data in a train, valid and test datset.</span>
-
 <span class="sd">    Args:</span>
 <span class="sd">        None</span>
 <span class="sd">    Returns:</span>
@@ -1236,9 +1222,10 @@ to fit the optimization problem.</p>
         <span class="n">input_width</span><span class="o">=</span><span class="n">x_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>\
         <span class="n">output_dim</span><span class="o">=</span><span class="mi">10</span><span class="p">,)</span>
 
-
+<span class="c1"># Load data</span>
 <span class="n">DATA</span> <span class="o">=</span> <span class="n">load_data</span><span class="p">()</span>
 
+<span class="c1"># Vizulaize the results</span>
 <span class="n">IDX</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="n">CANVAS</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">DIM</span><span class="o">*</span><span class="n">NUM_CLASSES</span><span class="p">,</span> <span class="n">NUM_CLASSES</span><span class="o">*</span><span class="n">DIM</span><span class="p">))</span>
 <span class="k">for</span> <span class="n">I</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">NUM_CLASSES</span><span class="p">):</span>
@@ -1252,8 +1239,7 @@ to fit the optimization problem.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
 
-<span class="c1"># 3. Defining the Convolutional Neural Network</span>
-
+<span class="c1"># Defining the Convolutional Neural Network</span>
 <span class="k">class</span> <span class="nc">Net</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Neural Network &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">input_height</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">input_width</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">num_classes</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>\
@@ -1336,11 +1322,11 @@ to fit the optimization problem.</p>
         <span class="k">return</span> <span class="n">F</span><span class="o">.</span><span class="n">log_softmax</span><span class="p">(</span><span class="n">x_picture</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">l_trans1</span>
 
 
+<span class="c1"># Print network</span>
 <span class="k">print</span><span class="p">(</span><span class="n">Net</span><span class="p">())</span>
-
 <span class="n">NET</span> <span class="o">=</span> <span class="n">Net</span><span class="p">()</span>
 
-<span class="c1"># test forward pass on dummy data</span>
+<span class="c1"># Test forward pass on dummy data</span>
 <span class="n">TEST_EXAMPLE</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">45</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">60</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span>
 <span class="n">TEST_EXAMPLE</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">TEST_EXAMPLE</span><span class="p">))</span>
 <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">():</span>
@@ -1360,7 +1346,6 @@ to fit the optimization problem.</p>
     <span class="sd">&quot;&quot;&quot; Get numpy array for both cuda and not. &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">():</span>
         <span class="k">return</span> <span class="n">x_picture</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
-
     <span class="k">return</span> <span class="n">x_picture</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
 
 
@@ -1377,15 +1362,24 @@ to fit the optimization problem.</p>
 <span class="sd">            - weight_decay: default (0.0)</span>
 <span class="sd">            - num_epochs: default (1)</span>
 <span class="sd">    Returns:</span>
-<span class="sd">        nn.Module: trained Network. &quot;&quot;&quot;</span>
+<span class="sd">        nn.Module: trained Network</span>
+<span class="sd">        float: The mean cost</span>
+<span class="sd">        float: Accuracy &quot;&quot;&quot;</span>
+
     <span class="c1"># Define the data</span>
     <span class="n">x_train</span> <span class="o">=</span> <span class="n">input_picture</span>
     <span class="n">y_train</span> <span class="o">=</span> <span class="n">label_picture</span>
     <span class="c1"># Initilize network</span>
     <span class="n">net</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+    <span class="c1"># Pre-locating memory</span>
+    <span class="n">costs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">correct</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="c1"># Define the hyperparameters</span>
     <span class="n">criteron</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">cross_entropy</span>
+    
+    <span class="c1">#Hyperparameter optimization</span>
     <span class="n">optimizer</span> <span class="o">=</span> <span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">net</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;lr&quot;</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">))</span>
+    
     <span class="n">scheduler</span> <span class="o">=</span> <span class="n">optim</span><span class="o">.</span><span class="n">lr_scheduler</span><span class="o">.</span><span class="n">StepLR</span><span class="p">(</span><span class="n">optimizer</span><span class="p">,</span>\
                 <span class="n">step_size</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;step_size&quot;</span><span class="p">,</span> <span class="mi">20</span><span class="p">)),</span>\
                 <span class="n">gamma</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;gamma&quot;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),)</span>
@@ -1404,9 +1398,12 @@ to fit the optimization problem.</p>
             <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
             <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
             <span class="n">scheduler</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
-
-<span class="c1">#    return net</span>
-    <span class="k">pass</span>
+            <span class="n">costs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">get_numpy</span><span class="p">(</span><span class="n">loss</span><span class="p">))</span>
+            <span class="n">preds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">get_numpy</span><span class="p">(</span><span class="n">output</span><span class="p">),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">correct</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">get_numpy</span><span class="p">(</span><span class="n">y_batch_tr</span><span class="p">)</span> <span class="o">==</span> <span class="n">preds</span><span class="p">)</span>
+    <span class="n">mean_cost</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">costs</span><span class="p">)</span>
+    <span class="n">accuracy</span> <span class="o">=</span> <span class="n">correct</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">num_samples</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">net</span><span class="p">,</span> <span class="n">mean_cost</span><span class="p">,</span> <span class="n">accuracy</span>
 
 <span class="k">def</span> <span class="nf">eval_bayesian_optimization</span><span class="p">(</span><span class="n">net</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span> <span class="n">input_picture</span><span class="p">:</span> <span class="n">DATA</span><span class="p">,</span>\
         <span class="n">label_picture</span><span class="p">:</span> <span class="n">DATA</span><span class="p">,</span> <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
@@ -1436,11 +1433,7 @@ to fit the optimization problem.</p>
             <span class="n">_</span><span class="p">,</span> <span class="n">predicted</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
             <span class="n">correct</span> <span class="o">+=</span> <span class="p">(</span><span class="n">predicted</span> <span class="o">==</span> <span class="n">y_batch_val</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
     <span class="c1"># Calculating the accuracy</span>
-
-<span class="c1">#    return float(correct/num_batches)</span>
-    <span class="k">pass</span>
-
-
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">correct</span><span class="o">/</span><span class="n">num_batches</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">evaluate_hyperparameters</span><span class="p">(</span><span class="n">parameterization</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Train and evaluate the network to find the best parameters</span>
@@ -1449,167 +1442,86 @@ to fit the optimization problem.</p>
 <span class="sd">    Returns:</span>
 <span class="sd">        float: classification accuracy &quot;&quot;&quot;</span>
     <span class="n">net</span> <span class="o">=</span> <span class="n">Net</span><span class="p">()</span>
-    <span class="n">net</span> <span class="o">=</span> <span class="n">train_bayesian_optimization</span><span class="p">(</span><span class="n">net</span><span class="o">=</span><span class="n">net</span><span class="p">,</span> <span class="n">input_picture</span><span class="o">=</span><span class="n">DATA</span><span class="p">[</span><span class="s1">&#39;x_train&#39;</span><span class="p">],</span><span class="n">label_picture</span><span class="o">=</span><span class="n">DATA</span><span class="p">[</span><span class="s1">&#39;y_train&#39;</span><span class="p">],</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameterization</span><span class="p">,)</span>
-    <span class="k">pass</span>
-<span class="c1">#    return eval_bayesian_optimization(net=net, input_picture=DATA[&#39;x_valid&#39;],label_picture=DATA[&#39;y_valid&#39;],)</span>
-
-
-    
-<span class="c1">#BEST_PARAMETERS, VALUES, EXPERIMENT, MODEL = optimize(parameters=[{&quot;name&quot;: &quot;lr&quot;, &quot;type&quot;: &quot;range&quot;, &quot;bounds&quot;: [1e-6, 0.4], &quot;log_scale&quot;: True},], evaluation_function=evaluate_hyperparameters, objective_name=&#39;accuracy&#39;,)</span>
+    <span class="n">net</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">train_bayesian_optimization</span><span class="p">(</span><span class="n">net</span><span class="o">=</span><span class="n">net</span><span class="p">,</span> <span class="n">input_picture</span><span class="o">=</span><span class="n">DATA</span><span class="p">[</span><span class="s1">&#39;x_train&#39;</span><span class="p">],</span>\
+            <span class="n">label_picture</span><span class="o">=</span><span class="n">DATA</span><span class="p">[</span><span class="s1">&#39;y_train&#39;</span><span class="p">],</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameterization</span><span class="p">,)</span>
+    <span class="k">return</span> <span class="n">eval_bayesian_optimization</span><span class="p">(</span><span class="n">net</span><span class="o">=</span><span class="n">net</span><span class="p">,</span> <span class="n">input_picture</span><span class="o">=</span><span class="n">DATA</span><span class="p">[</span><span class="s1">&#39;x_valid&#39;</span><span class="p">],</span>\
+            <span class="n">label_picture</span><span class="o">=</span><span class="n">DATA</span><span class="p">[</span><span class="s1">&#39;y_valid&#39;</span><span class="p">],)</span>
+            
+<span class="c1"># Optimizating the network with bayesian optimization</span>
+<span class="c1">#BEST_PARAMETERS, VALUES, EXPERIMENT, MODEL = optimize(parameters=[{&quot;name&quot;: &quot;lr&quot;,\</span>
+<span class="c1">#                    &quot;type&quot;: &quot;range&quot;,&quot;bounds&quot;: [1e-6, 0.4], &quot;log_scale&quot;: True},],\</span>
+<span class="c1">#                     evaluation_function=evaluate_hyperparameters,\</span>
+<span class="c1">#                    objective_name=&#39;accuracy&#39;,)</span>
 
 
 <span class="c1"># Saving the results from the optimization</span>
-<span class="n">BE</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="n">ME</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="n">CO</span> <span class="o">=</span> <span class="p">[]</span>
-
 <span class="c1">#MEANS, COVARIANCES = VALUES</span>
-
-<span class="c1">#BE.append(BEST_PARAMETERS)</span>
-<span class="c1">#ME.append(MEANS)</span>
-<span class="c1">#CO.append(COVARIANCES)</span>
 
 <span class="c1"># Printing the results of the hyperparamter optimization</span>
 <span class="c1">#print(BEST_PARAMETERS)</span>
 <span class="c1">#print(MEANS, COVARIANCES)</span>
 
 <span class="c1"># Findin the best hyperparameter for training the network</span>
-
 <span class="c1">#DATA1 = EXPERIMENT.fetch_data()</span>
 <span class="c1">#DF = DATA1.df</span>
 <span class="c1">#BEST_ARM_NAME = DF.arm_name[DF[&#39;mean&#39;] == DF[&#39;mean&#39;].max()].values[0]</span>
 <span class="c1">#BEST_ARM = EXPERIMENT.arms_by_name[BEST_ARM_NAME]</span>
-<span class="c1">#BEST_ARM</span>
 
-
-<span class="k">class</span> <span class="nc">best_arm1</span><span class="p">:</span>
+<span class="c1"># Parameters used under non-hyperparameter optimization</span>
+<span class="k">class</span> <span class="nc">Parameters</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot; Parameters used to test the code &quot;&quot;&quot;</span>
     <span class="n">parameters</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;lr&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.001</span>
     <span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;momentum&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.001</span>
     <span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;weight_decay&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.001</span>
-<span class="n">BEST_ARM</span> <span class="o">=</span> <span class="n">best_arm1</span><span class="p">()</span>
+    <span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;step_size&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">20</span>
+    <span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;gamma&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;num_epochs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">BEST_ARM</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
 
-
-<span class="c1">#render(plot_contour(model=MODEL, param_x=&#39;lr&#39;,</span>
-<span class="c1">#                    param_y=&#39;weight_decay&#39;, metric_name=&#39;accuracy&#39;))</span>
-
-
-<span class="c1">#BEST_OBJECTIVES = np.array([[trial.objective_mean*100 for trial in EXPERIMENT.trials.values()]])</span>
-<span class="c1">#BEST_OBJECTIVE_PLOT = optimization_trace_single_method(y=np.maximum.accumulate(\</span>
-<span class="c1">#    BEST_OBJECTIVES, axis=1), title=&quot;Model performance vs. # of iterations&quot;,\</span>
-<span class="c1">#    ylabel=&quot;Classification Accuracy, %&quot;,)</span>
-
-<span class="c1">#render(BEST_OBJECTIVE_PLOT)</span>
-
+<span class="c1">#Make a new network with random weights</span>
 <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">()</span>
-
-<span class="n">LR</span> <span class="o">=</span> <span class="n">BEST_ARM</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;lr&quot;</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">)</span>
-
-<span class="n">net</span> <span class="o">=</span> <span class="n">Net</span><span class="p">()</span>
-<span class="n">net</span> <span class="o">=</span> <span class="n">Net</span><span class="p">()</span>
-
-<span class="n">criterion</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">CrossEntropyLoss</span><span class="p">()</span>
-<span class="n">optimizer</span> <span class="o">=</span> <span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">net</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="n">LR</span><span class="p">)</span>
-
-<span class="k">def</span> <span class="nf">train_epoch</span><span class="p">(</span><span class="n">input_picture</span><span class="p">:</span> <span class="n">DATA</span><span class="p">,</span> <span class="n">label_picture</span><span class="p">:</span> <span class="n">DATA</span><span class="p">,)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot; Train the network with the optimized hyperparamters.</span>
-<span class="sd">    Args:</span>
-<span class="sd">        Input: The image</span>
-<span class="sd">        Label: The label to the respective image</span>
-<span class="sd">    Returns:</span>
-<span class="sd">        float: the mean cost and the classification accuracy &quot;&quot;&quot;</span>
-    <span class="c1"># Define the data</span>
-    <span class="n">x_valid</span> <span class="o">=</span> <span class="n">input_picture</span>
-    <span class="n">y_valid</span> <span class="o">=</span> <span class="n">label_picture</span>
-
-    <span class="c1"># Initilize network</span>
-    <span class="n">net</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
-
-    <span class="c1"># Pre-locating memory</span>
-    <span class="n">costs</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">correct</span> <span class="o">=</span> <span class="mi">0</span>
-
-    <span class="c1"># Get the number of samples and batches before testing the network</span>
-    <span class="n">num_samples</span> <span class="o">=</span> <span class="n">x_valid</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">num_batches</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">num_samples</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">BATCH_SIZE</span><span class="p">)))</span>
-
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_batches</span><span class="p">):</span>
-        <span class="n">idx</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="o">*</span><span class="n">BATCH_SIZE</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">((</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">BATCH_SIZE</span><span class="p">,</span> <span class="n">num_samples</span><span class="p">))</span>
-        <span class="n">x_batch_tr</span> <span class="o">=</span> <span class="n">get_variable</span><span class="p">(</span><span class="n">Variable</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">x_valid</span><span class="p">[</span><span class="n">idx</span><span class="p">])))</span>
-        <span class="n">y_batch_tr</span> <span class="o">=</span> <span class="n">get_variable</span><span class="p">(</span><span class="n">Variable</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">y_valid</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span><span class="o">.</span><span class="n">long</span><span class="p">()))</span>
-
-        <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
-        <span class="n">output</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">net</span><span class="p">(</span><span class="n">x_batch_tr</span><span class="p">)</span>
-        <span class="n">batch_loss</span> <span class="o">=</span> <span class="n">criterion</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">y_batch_tr</span><span class="p">)</span>
-
-        <span class="n">batch_loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
-        <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
-
-        <span class="n">costs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">get_numpy</span><span class="p">(</span><span class="n">batch_loss</span><span class="p">))</span>
-        <span class="n">preds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">get_numpy</span><span class="p">(</span><span class="n">output</span><span class="p">),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">correct</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">get_numpy</span><span class="p">(</span><span class="n">y_batch_tr</span><span class="p">)</span> <span class="o">==</span> <span class="n">preds</span><span class="p">)</span>
-
-<span class="c1">#    return np.mean(costs), correct / float(num_samples)</span>
-    <span class="k">pass</span>
-
-<span class="k">def</span> <span class="nf">eval_epoch</span><span class="p">(</span><span class="n">input_picture</span><span class="p">:</span> <span class="n">DATA</span><span class="p">,</span> <span class="n">label_picture</span><span class="p">:</span> <span class="n">DATA</span><span class="p">,)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot; Compute classification accuracy on provided dataset to the optimized network.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        Input: The image</span>
-<span class="sd">        Label: Th label to the respective image</span>
-<span class="sd">    Returns:</span>
-<span class="sd">        float: classification accuracy &quot;&quot;&quot;</span>
-    <span class="c1"># Define the data</span>
-    <span class="n">x_valid</span> <span class="o">=</span> <span class="n">input_picture</span>
-    <span class="n">y_valid</span> <span class="o">=</span> <span class="n">label_picture</span>
-
-    <span class="c1"># Pre-locating memory</span>
-    <span class="n">pred_list</span> <span class="o">=</span> <span class="p">[]</span>
-
-    <span class="c1"># Get the number of samples and batches before testing the network</span>
-    <span class="n">num_samples</span> <span class="o">=</span> <span class="n">x_valid</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">num_batches</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">num_samples</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">BATCH_SIZE</span><span class="p">)))</span>
-    <span class="n">net</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_batches</span><span class="p">):</span>
-        <span class="n">idx</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="o">*</span><span class="n">BATCH_SIZE</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">((</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">BATCH_SIZE</span><span class="p">,</span> <span class="n">num_samples</span><span class="p">))</span>
-        <span class="n">x_batch_val</span> <span class="o">=</span> <span class="n">get_variable</span><span class="p">(</span><span class="n">Variable</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">x_valid</span><span class="p">[</span><span class="n">idx</span><span class="p">])))</span>
-        <span class="n">output</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">net</span><span class="p">(</span><span class="n">x_batch_val</span><span class="p">)</span>
-        <span class="n">pred_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">get_numpy</span><span class="p">(</span><span class="n">output</span><span class="p">))</span>
-
-    <span class="c1"># Calculating the accuracy</span>
-    <span class="n">preds_result</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">pred_list</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-    <span class="n">preds_result</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">preds_result</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">accuracy_results</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">preds_result</span> <span class="o">==</span> <span class="n">y_valid</span><span class="p">)</span>
-
-
-<span class="c1">#    return accuracy_results</span>
-    <span class="k">pass</span>
+<span class="n">NET</span> <span class="o">=</span> <span class="n">Net</span><span class="p">()</span>
+<span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">()</span>
+<span class="n">NET</span> <span class="o">=</span> <span class="n">Net</span><span class="p">()</span>
 
 <span class="c1"># Saving the results from the optimization</span>
 <span class="n">VALID_ACCS</span><span class="p">,</span> <span class="n">TRAIN_ACCS</span><span class="p">,</span> <span class="n">TEST_ACCS</span><span class="p">,</span> <span class="n">TRAIN_COSTS</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
 
-<span class="n">N</span> <span class="o">=</span> <span class="mi">20</span>
+
+<span class="c1"># Training the network for a specific number of epochs</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="k">while</span> <span class="n">N</span> <span class="o">&lt;</span> <span class="n">NUM_EPOCHS</span><span class="p">:</span>
     <span class="n">N</span> <span class="o">+=</span> <span class="mi">1</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Epoch </span><span class="si">%d</span><span class="s2">:&quot;</span> <span class="o">%</span> <span class="n">N</span><span class="p">)</span>
-
-        <span class="n">TRAIN_COST</span><span class="p">,</span> <span class="n">TRAIN_ACC</span> <span class="o">=</span> <span class="n">train_epoch</span><span class="p">(</span><span class="n">input_picture</span><span class="o">=</span><span class="n">DATA</span><span class="p">[</span><span class="s1">&#39;x_train&#39;</span><span class="p">],</span>\
-                                            <span class="n">label_picture</span><span class="o">=</span><span class="n">DATA</span><span class="p">[</span><span class="s1">&#39;y_train&#39;</span><span class="p">],)</span>
-        <span class="n">VALID_ACC</span> <span class="o">=</span> <span class="n">eval_epoch</span><span class="p">(</span><span class="n">input_picture</span><span class="o">=</span><span class="n">DATA</span><span class="p">[</span><span class="s1">&#39;x_valid&#39;</span><span class="p">],</span> <span class="n">label_picture</span><span class="o">=</span><span class="n">DATA</span><span class="p">[</span><span class="s1">&#39;y_valid&#39;</span><span class="p">],)</span>
-        <span class="n">TEST_ACC</span> <span class="o">=</span> <span class="n">eval_epoch</span><span class="p">(</span><span class="n">input_picture</span><span class="o">=</span><span class="n">DATA</span><span class="p">[</span><span class="s1">&#39;x_test&#39;</span><span class="p">],</span> <span class="n">label_picture</span><span class="o">=</span><span class="n">DATA</span><span class="p">[</span><span class="s1">&#39;y_test&#39;</span><span class="p">],)</span>
+        <span class="c1"># Training the network</span>
+        <span class="n">NET</span><span class="p">,</span> <span class="n">TRAIN_COST</span><span class="p">,</span> <span class="n">TRAIN_ACC</span> <span class="o">=</span> <span class="n">train_bayesian_optimization</span><span class="p">(</span><span class="n">net</span><span class="o">=</span><span class="n">NET</span><span class="p">,</span>\
+                                        <span class="n">input_picture</span><span class="o">=</span><span class="n">DATA</span><span class="p">[</span><span class="s1">&#39;x_train&#39;</span><span class="p">],</span>\
+                                        <span class="n">label_picture</span><span class="o">=</span><span class="n">DATA</span><span class="p">[</span><span class="s1">&#39;y_train&#39;</span><span class="p">],</span>\
+                                        <span class="n">parameters</span><span class="o">=</span><span class="n">BEST_ARM</span><span class="o">.</span><span class="n">parameters</span><span class="p">,)</span>
+        <span class="c1"># Validation the network</span>
+        <span class="n">VALID_ACC</span> <span class="o">=</span> <span class="n">eval_bayesian_optimization</span><span class="p">(</span><span class="n">net</span><span class="o">=</span><span class="n">NET</span><span class="p">,</span>\
+                                        <span class="n">input_picture</span><span class="o">=</span><span class="n">DATA</span><span class="p">[</span><span class="s1">&#39;x_valid&#39;</span><span class="p">],</span>\
+                                        <span class="n">label_picture</span><span class="o">=</span><span class="n">DATA</span><span class="p">[</span><span class="s1">&#39;y_valid&#39;</span><span class="p">],)</span>
+        <span class="c1"># Testing the network</span>
+        <span class="n">TEST_ACC</span> <span class="o">=</span> <span class="n">eval_bayesian_optimization</span><span class="p">(</span><span class="n">net</span><span class="o">=</span><span class="n">NET</span><span class="p">,</span>\
+                                        <span class="n">input_picture</span><span class="o">=</span><span class="n">DATA</span><span class="p">[</span><span class="s1">&#39;x_test&#39;</span><span class="p">],</span>\
+                                        <span class="n">label_picture</span><span class="o">=</span><span class="n">DATA</span><span class="p">[</span><span class="s1">&#39;y_test&#39;</span><span class="p">],)</span>
+        <span class="c1"># Saving the results</span>
         <span class="n">VALID_ACCS</span> <span class="o">+=</span> <span class="p">[</span><span class="n">VALID_ACC</span><span class="p">]</span>
         <span class="n">TEST_ACCS</span> <span class="o">+=</span> <span class="p">[</span><span class="n">TEST_ACC</span><span class="p">]</span>
         <span class="n">TRAIN_ACCS</span> <span class="o">+=</span> <span class="p">[</span><span class="n">TRAIN_ACC</span><span class="p">]</span>
         <span class="n">TRAIN_COSTS</span> <span class="o">+=</span> <span class="p">[</span><span class="n">TRAIN_COST</span><span class="p">]</span>
+        
+        <span class="c1"># Printing the results</span>
         <span class="k">print</span><span class="p">(</span><span class="s2">&quot;train cost {0:.2}, train acc {1:.2}, val acc {2:.2}, test acc {3:.2}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
             <span class="n">TRAIN_COST</span><span class="p">,</span> <span class="n">TRAIN_ACC</span><span class="p">,</span> <span class="n">VALID_ACC</span><span class="p">,</span> <span class="n">TEST_ACC</span><span class="p">))</span>
     <span class="k">except</span> <span class="ne">KeyboardInterrupt</span><span class="p">:</span>
         <span class="k">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">KeyboardInterrupt&#39;</span><span class="p">)</span>
         <span class="k">break</span>
 
-
+<span class="c1"># Printing the results</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">9</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">TRAIN_ACCS</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Training Error&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">VALID_ACCS</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Validation Error&#39;</span><span class="p">)</span>
@@ -1636,14 +1548,6 @@ to fit the optimization problem.</p>
 
       </div>
       <div class="item">
-      <p id="Running_HO_on_CNN_doc.BE" class="name">var <span class="ident">BE</span></p>
-      
-  
-  <div class="source_cont">
-</div>
-
-      </div>
-      <div class="item">
       <p id="Running_HO_on_CNN_doc.BEST_ARM" class="name">var <span class="ident">BEST_ARM</span></p>
       
   
@@ -1653,14 +1557,6 @@ to fit the optimization problem.</p>
       </div>
       <div class="item">
       <p id="Running_HO_on_CNN_doc.CANVAS" class="name">var <span class="ident">CANVAS</span></p>
-      
-  
-  <div class="source_cont">
-</div>
-
-      </div>
-      <div class="item">
-      <p id="Running_HO_on_CNN_doc.CO" class="name">var <span class="ident">CO</span></p>
       
   
   <div class="source_cont">
@@ -1701,22 +1597,6 @@ to fit the optimization problem.</p>
       </div>
       <div class="item">
       <p id="Running_HO_on_CNN_doc.J" class="name">var <span class="ident">J</span></p>
-      
-  
-  <div class="source_cont">
-</div>
-
-      </div>
-      <div class="item">
-      <p id="Running_HO_on_CNN_doc.LR" class="name">var <span class="ident">LR</span></p>
-      
-  
-  <div class="source_cont">
-</div>
-
-      </div>
-      <div class="item">
-      <p id="Running_HO_on_CNN_doc.ME" class="name">var <span class="ident">ME</span></p>
       
   
   <div class="source_cont">
@@ -1811,30 +1691,6 @@ to fit the optimization problem.</p>
 </div>
 
       </div>
-      <div class="item">
-      <p id="Running_HO_on_CNN_doc.criterion" class="name">var <span class="ident">criterion</span></p>
-      
-  
-  <div class="source_cont">
-</div>
-
-      </div>
-      <div class="item">
-      <p id="Running_HO_on_CNN_doc.net" class="name">var <span class="ident">net</span></p>
-      
-  
-  <div class="source_cont">
-</div>
-
-      </div>
-      <div class="item">
-      <p id="Running_HO_on_CNN_doc.optimizer" class="name">var <span class="ident">optimizer</span></p>
-      
-  
-  <div class="source_cont">
-</div>
-
-      </div>
 
     <h2 class="section-title" id="header-functions">Functions</h2>
       
@@ -1885,67 +1741,7 @@ Returns:
             <span class="n">_</span><span class="p">,</span> <span class="n">predicted</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
             <span class="n">correct</span> <span class="o">+=</span> <span class="p">(</span><span class="n">predicted</span> <span class="o">==</span> <span class="n">y_batch_val</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
     <span class="c1"># Calculating the accuracy</span>
-
-<span class="c1">#    return float(correct/num_batches)</span>
-    <span class="k">pass</span>
-</pre></div>
-
-  </div>
-</div>
-
-  </div>
-  
-      
-  <div class="item">
-    <div class="name def" id="Running_HO_on_CNN_doc.eval_epoch">
-    <p>def <span class="ident">eval_epoch</span>(</p><p>input_picture, label_picture)</p>
-    </div>
-    
-
-    
-  
-    <div class="desc"><p>Compute classification accuracy on provided dataset to the optimized network.</p>
-<p>Args:
-    Input: The image
-    Label: Th label to the respective image
-Returns:
-    float: classification accuracy</p></div>
-  <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-Running_HO_on_CNN_doc.eval_epoch', this);">Show source &equiv;</a></p>
-  <div id="source-Running_HO_on_CNN_doc.eval_epoch" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">eval_epoch</span><span class="p">(</span><span class="n">input_picture</span><span class="p">:</span> <span class="n">DATA</span><span class="p">,</span> <span class="n">label_picture</span><span class="p">:</span> <span class="n">DATA</span><span class="p">,)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot; Compute classification accuracy on provided dataset to the optimized network.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        Input: The image</span>
-<span class="sd">        Label: Th label to the respective image</span>
-<span class="sd">    Returns:</span>
-<span class="sd">        float: classification accuracy &quot;&quot;&quot;</span>
-    <span class="c1"># Define the data</span>
-    <span class="n">x_valid</span> <span class="o">=</span> <span class="n">input_picture</span>
-    <span class="n">y_valid</span> <span class="o">=</span> <span class="n">label_picture</span>
-
-    <span class="c1"># Pre-locating memory</span>
-    <span class="n">pred_list</span> <span class="o">=</span> <span class="p">[]</span>
-
-    <span class="c1"># Get the number of samples and batches before testing the network</span>
-    <span class="n">num_samples</span> <span class="o">=</span> <span class="n">x_valid</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">num_batches</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">num_samples</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">BATCH_SIZE</span><span class="p">)))</span>
-    <span class="n">net</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_batches</span><span class="p">):</span>
-        <span class="n">idx</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="o">*</span><span class="n">BATCH_SIZE</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">((</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">BATCH_SIZE</span><span class="p">,</span> <span class="n">num_samples</span><span class="p">))</span>
-        <span class="n">x_batch_val</span> <span class="o">=</span> <span class="n">get_variable</span><span class="p">(</span><span class="n">Variable</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">x_valid</span><span class="p">[</span><span class="n">idx</span><span class="p">])))</span>
-        <span class="n">output</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">net</span><span class="p">(</span><span class="n">x_batch_val</span><span class="p">)</span>
-        <span class="n">pred_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">get_numpy</span><span class="p">(</span><span class="n">output</span><span class="p">))</span>
-
-    <span class="c1"># Calculating the accuracy</span>
-    <span class="n">preds_result</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">pred_list</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-    <span class="n">preds_result</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">preds_result</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">accuracy_results</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">preds_result</span> <span class="o">==</span> <span class="n">y_valid</span><span class="p">)</span>
-
-
-<span class="c1">#    return accuracy_results</span>
-    <span class="k">pass</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">correct</span><span class="o">/</span><span class="n">num_batches</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1977,8 +1773,10 @@ Returns:
 <span class="sd">    Returns:</span>
 <span class="sd">        float: classification accuracy &quot;&quot;&quot;</span>
     <span class="n">net</span> <span class="o">=</span> <span class="n">Net</span><span class="p">()</span>
-    <span class="n">net</span> <span class="o">=</span> <span class="n">train_bayesian_optimization</span><span class="p">(</span><span class="n">net</span><span class="o">=</span><span class="n">net</span><span class="p">,</span> <span class="n">input_picture</span><span class="o">=</span><span class="n">DATA</span><span class="p">[</span><span class="s1">&#39;x_train&#39;</span><span class="p">],</span><span class="n">label_picture</span><span class="o">=</span><span class="n">DATA</span><span class="p">[</span><span class="s1">&#39;y_train&#39;</span><span class="p">],</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameterization</span><span class="p">,)</span>
-    <span class="k">pass</span>
+    <span class="n">net</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">train_bayesian_optimization</span><span class="p">(</span><span class="n">net</span><span class="o">=</span><span class="n">net</span><span class="p">,</span> <span class="n">input_picture</span><span class="o">=</span><span class="n">DATA</span><span class="p">[</span><span class="s1">&#39;x_train&#39;</span><span class="p">],</span>\
+            <span class="n">label_picture</span><span class="o">=</span><span class="n">DATA</span><span class="p">[</span><span class="s1">&#39;y_train&#39;</span><span class="p">],</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameterization</span><span class="p">,)</span>
+    <span class="k">return</span> <span class="n">eval_bayesian_optimization</span><span class="p">(</span><span class="n">net</span><span class="o">=</span><span class="n">net</span><span class="p">,</span> <span class="n">input_picture</span><span class="o">=</span><span class="n">DATA</span><span class="p">[</span><span class="s1">&#39;x_valid&#39;</span><span class="p">],</span>\
+            <span class="n">label_picture</span><span class="o">=</span><span class="n">DATA</span><span class="p">[</span><span class="s1">&#39;y_valid&#39;</span><span class="p">],)</span>
 </pre></div>
 
   </div>
@@ -2003,7 +1801,6 @@ Returns:
     <span class="sd">&quot;&quot;&quot; Get numpy array for both cuda and not. &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">():</span>
         <span class="k">return</span> <span class="n">x_picture</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
-
     <span class="k">return</span> <span class="n">x_picture</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
 </pre></div>
 
@@ -2046,8 +1843,8 @@ Returns:
 
     
   
-    <div class="desc"><p>Load the npz-map and sort the data in a train, valid and test datset.</p>
-<p>Args:
+    <div class="desc"><p>Load the npz-map and sort the data in a train, valid and test datset.
+Args:
     None
 Returns:
     dict: A dictionary with the data sorted.</p></div>
@@ -2056,7 +1853,6 @@ Returns:
   <div id="source-Running_HO_on_CNN_doc.load_data" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">load_data</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot; Load the npz-map and sort the data in a train, valid and test datset.</span>
-
 <span class="sd">    Args:</span>
 <span class="sd">        None</span>
 <span class="sd">    Returns:</span>
@@ -2115,7 +1911,9 @@ Args:
         - weight_decay: default (0.0)
         - num_epochs: default (1)
 Returns:
-    nn.Module: trained Network.</p></div>
+    nn.Module: trained Network
+    float: The mean cost
+    float: Accuracy</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-Running_HO_on_CNN_doc.train_bayesian_optimization', this);">Show source &equiv;</a></p>
   <div id="source-Running_HO_on_CNN_doc.train_bayesian_optimization" class="source">
@@ -2132,15 +1930,24 @@ Returns:
 <span class="sd">            - weight_decay: default (0.0)</span>
 <span class="sd">            - num_epochs: default (1)</span>
 <span class="sd">    Returns:</span>
-<span class="sd">        nn.Module: trained Network. &quot;&quot;&quot;</span>
+<span class="sd">        nn.Module: trained Network</span>
+<span class="sd">        float: The mean cost</span>
+<span class="sd">        float: Accuracy &quot;&quot;&quot;</span>
+
     <span class="c1"># Define the data</span>
     <span class="n">x_train</span> <span class="o">=</span> <span class="n">input_picture</span>
     <span class="n">y_train</span> <span class="o">=</span> <span class="n">label_picture</span>
     <span class="c1"># Initilize network</span>
     <span class="n">net</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+    <span class="c1"># Pre-locating memory</span>
+    <span class="n">costs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">correct</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="c1"># Define the hyperparameters</span>
     <span class="n">criteron</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">cross_entropy</span>
+    
+    <span class="c1">#Hyperparameter optimization</span>
     <span class="n">optimizer</span> <span class="o">=</span> <span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">net</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;lr&quot;</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">))</span>
+    
     <span class="n">scheduler</span> <span class="o">=</span> <span class="n">optim</span><span class="o">.</span><span class="n">lr_scheduler</span><span class="o">.</span><span class="n">StepLR</span><span class="p">(</span><span class="n">optimizer</span><span class="p">,</span>\
                 <span class="n">step_size</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;step_size&quot;</span><span class="p">,</span> <span class="mi">20</span><span class="p">)),</span>\
                 <span class="n">gamma</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;gamma&quot;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),)</span>
@@ -2159,74 +1966,12 @@ Returns:
             <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
             <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
             <span class="n">scheduler</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
-
-<span class="c1">#    return net</span>
-    <span class="k">pass</span>
-</pre></div>
-
-  </div>
-</div>
-
-  </div>
-  
-      
-  <div class="item">
-    <div class="name def" id="Running_HO_on_CNN_doc.train_epoch">
-    <p>def <span class="ident">train_epoch</span>(</p><p>input_picture, label_picture)</p>
-    </div>
-    
-
-    
-  
-    <div class="desc"><p>Train the network with the optimized hyperparamters.
-Args:
-    Input: The image
-    Label: The label to the respective image
-Returns:
-    float: the mean cost and the classification accuracy</p></div>
-  <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-Running_HO_on_CNN_doc.train_epoch', this);">Show source &equiv;</a></p>
-  <div id="source-Running_HO_on_CNN_doc.train_epoch" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">train_epoch</span><span class="p">(</span><span class="n">input_picture</span><span class="p">:</span> <span class="n">DATA</span><span class="p">,</span> <span class="n">label_picture</span><span class="p">:</span> <span class="n">DATA</span><span class="p">,)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot; Train the network with the optimized hyperparamters.</span>
-<span class="sd">    Args:</span>
-<span class="sd">        Input: The image</span>
-<span class="sd">        Label: The label to the respective image</span>
-<span class="sd">    Returns:</span>
-<span class="sd">        float: the mean cost and the classification accuracy &quot;&quot;&quot;</span>
-    <span class="c1"># Define the data</span>
-    <span class="n">x_valid</span> <span class="o">=</span> <span class="n">input_picture</span>
-    <span class="n">y_valid</span> <span class="o">=</span> <span class="n">label_picture</span>
-
-    <span class="c1"># Initilize network</span>
-    <span class="n">net</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
-
-    <span class="c1"># Pre-locating memory</span>
-    <span class="n">costs</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">correct</span> <span class="o">=</span> <span class="mi">0</span>
-
-    <span class="c1"># Get the number of samples and batches before testing the network</span>
-    <span class="n">num_samples</span> <span class="o">=</span> <span class="n">x_valid</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">num_batches</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">num_samples</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">BATCH_SIZE</span><span class="p">)))</span>
-
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_batches</span><span class="p">):</span>
-        <span class="n">idx</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="o">*</span><span class="n">BATCH_SIZE</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">((</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">BATCH_SIZE</span><span class="p">,</span> <span class="n">num_samples</span><span class="p">))</span>
-        <span class="n">x_batch_tr</span> <span class="o">=</span> <span class="n">get_variable</span><span class="p">(</span><span class="n">Variable</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">x_valid</span><span class="p">[</span><span class="n">idx</span><span class="p">])))</span>
-        <span class="n">y_batch_tr</span> <span class="o">=</span> <span class="n">get_variable</span><span class="p">(</span><span class="n">Variable</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">y_valid</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span><span class="o">.</span><span class="n">long</span><span class="p">()))</span>
-
-        <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
-        <span class="n">output</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">net</span><span class="p">(</span><span class="n">x_batch_tr</span><span class="p">)</span>
-        <span class="n">batch_loss</span> <span class="o">=</span> <span class="n">criterion</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">y_batch_tr</span><span class="p">)</span>
-
-        <span class="n">batch_loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
-        <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
-
-        <span class="n">costs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">get_numpy</span><span class="p">(</span><span class="n">batch_loss</span><span class="p">))</span>
-        <span class="n">preds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">get_numpy</span><span class="p">(</span><span class="n">output</span><span class="p">),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">correct</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">get_numpy</span><span class="p">(</span><span class="n">y_batch_tr</span><span class="p">)</span> <span class="o">==</span> <span class="n">preds</span><span class="p">)</span>
-
-<span class="c1">#    return np.mean(costs), correct / float(num_samples)</span>
-    <span class="k">pass</span>
+            <span class="n">costs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">get_numpy</span><span class="p">(</span><span class="n">loss</span><span class="p">))</span>
+            <span class="n">preds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">get_numpy</span><span class="p">(</span><span class="n">output</span><span class="p">),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">correct</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">get_numpy</span><span class="p">(</span><span class="n">y_batch_tr</span><span class="p">)</span> <span class="o">==</span> <span class="n">preds</span><span class="p">)</span>
+    <span class="n">mean_cost</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">costs</span><span class="p">)</span>
+    <span class="n">accuracy</span> <span class="o">=</span> <span class="n">correct</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">num_samples</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">net</span><span class="p">,</span> <span class="n">mean_cost</span><span class="p">,</span> <span class="n">accuracy</span>
 </pre></div>
 
   </div>
@@ -4095,17 +3840,22 @@ etc.</p>
       </div>
       
       <div class="item">
-      <p id="Running_HO_on_CNN_doc.best_arm1" class="name">class <span class="ident">best_arm1</span></p>
+      <p id="Running_HO_on_CNN_doc.Parameters" class="name">class <span class="ident">Parameters</span></p>
       
   
+    <div class="desc"><p>Parameters used to test the code</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-Running_HO_on_CNN_doc.best_arm1', this);">Show source &equiv;</a></p>
-  <div id="source-Running_HO_on_CNN_doc.best_arm1" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">best_arm1</span><span class="p">:</span>
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-Running_HO_on_CNN_doc.Parameters', this);">Show source &equiv;</a></p>
+  <div id="source-Running_HO_on_CNN_doc.Parameters" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">Parameters</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot; Parameters used to test the code &quot;&quot;&quot;</span>
     <span class="n">parameters</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;lr&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.001</span>
     <span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;momentum&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.001</span>
     <span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;weight_decay&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.001</span>
+    <span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;step_size&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">20</span>
+    <span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;gamma&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;num_epochs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
 </pre></div>
 
   </div>
@@ -4115,12 +3865,12 @@ etc.</p>
       <div class="class">
           <h3>Ancestors (in MRO)</h3>
           <ul class="class_list">
-          <li><a href="#Running_HO_on_CNN_doc.best_arm1">best_arm1</a></li>
+          <li><a href="#Running_HO_on_CNN_doc.Parameters">Parameters</a></li>
           <li>builtins.object</li>
           </ul>
           <h3>Class variables</h3>
             <div class="item">
-            <p id="Running_HO_on_CNN_doc.best_arm1.parameters" class="name">var <span class="ident">parameters</span></p>
+            <p id="Running_HO_on_CNN_doc.Parameters.parameters" class="name">var <span class="ident">parameters</span></p>
             
 
             
