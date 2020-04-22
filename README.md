@@ -107,6 +107,8 @@ Open the terminal and make sure you are in the
 "cmse802_spring2020_hyperparamterop"- folder. 
 Ten run: pylint --disable=no-member Hyperparameter_Optimization
 
+# #
 
+The video presentation can be seen at: https://youtu.be/WCORT4HQZpU
 
 
