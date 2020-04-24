@@ -76,7 +76,7 @@ and 0.4.2.
 
 Or 
 
-conda env create --prefix ./envs --file requirements.yml<br/>
+conda env create --prefix ./envs --file ./Software/requirements.yml<br/>
 conda activate ./envs<br/>
 
 To delete the environment: <br/>
@@ -85,7 +85,7 @@ rm -rf ./envs<br/>
 
 Or <br/>
 
-pip install requirements.txt  <br/>
+pip install ./Software/requirements.txt  <br/>
 
 Or
 
