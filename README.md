@@ -57,7 +57,7 @@ This is done by approximations, since we cannot solve the problem analyticly. Th
 
 In this project the module called Ax (Adaptive Experimentation Platform) is used to perform BO in Python. The results could look like this
 
-<img src="images/renderplot.png" />
+<img src="/Documentation/images/renderplot.png" />
 
 
 # Running the programe #
