@@ -95,9 +95,9 @@ Or
 
 Open the terminal and make sure you are in the 
 "cmse802_spring2020_hyperparamterop"- folder. <br/>
-Then run: 
-    - make init
-    - conda activate ./envs
+Then run:  <br/>
+    - make init  <br/>
+    - conda activate ./envs  <br/>
 
 
 # #
