@@ -89,7 +89,7 @@ rm -rf ./envs<br/>
 
 Or <br/>
 
-pip install -r requirements.txt  <br/>
+pip install requirements.txt  <br/>
 
 Or
 
