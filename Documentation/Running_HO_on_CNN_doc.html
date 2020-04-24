@@ -1,0 +1,1433 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.8.1" />
+<title>Running_HO_on_CNN_doc API documentation</title>
+<meta name="description" content="This code is modified version of the code from
+https://github.com/DeepLearningDTU/02456-deep-learning-with-PyTorch
+to fit the optimization problem." />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>Running_HO_on_CNN_doc</code></h1>
+</header>
+<section id="section-intro">
+<p>This code is modified version of the code from
+<a href="https://github.com/DeepLearningDTU/02456-deep-learning-with-PyTorch">https://github.com/DeepLearningDTU/02456-deep-learning-with-PyTorch</a>
+to fit the optimization problem.</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">#!/usr/bin/env python
+# coding: utf-8
+
+# In[1]:
+
+
+&#34;&#34;&#34; This code is modified version of the code from
+    https://github.com/DeepLearningDTU/02456-deep-learning-with-PyTorch
+    to fit the optimization problem.
+&#34;&#34;&#34;
+#!/usr/bin/env python
+# coding: utf-8
+
+# Loading modules
+
+
+# import warnings
+# from itertools import accumulate
+import warnings
+from typing import Dict #, List
+import random
+#from ax.service.managed_loop import optimize
+import matplotlib.pyplot as plt
+import numpy as np
+import torch
+import torch.optim as optim
+import torch.nn.functional as F
+import torch.nn as nn
+from torch.autograd import Variable
+warnings.filterwarnings(&#34;ignore&#34;, category=UserWarning, module=&#34;torch.nn.functional&#34;)
+
+
+# Load data and minding to be smaller.
+NUM_EPOCHS = 0
+BATCH_SIZE = 256
+DIM = 60
+NUM_CLASSES = 10
+MNIST_C = &#34;./Hyperparameter_Optimization/mnist_cluttered_60x60_6distortions.npz&#34;
+
+# Load data function
+def load_data():
+    &#34;&#34;&#34; Load the npz-map and sort the data in a train, valid and test datset.
+    Args:
+        None
+    Returns:
+        dict: A dictionary with the data sorted. &#34;&#34;&#34;
+
+    data_pictures = np.load(MNIST_C)
+    x_train, y_train = data_pictures[&#39;x_train&#39;], np.argmax(data_pictures[&#39;y_train&#39;], axis=-1)
+    x_valid, y_valid = data_pictures[&#39;x_valid&#39;], np.argmax(data_pictures[&#39;y_valid&#39;], axis=-1)
+    x_test, y_test = data_pictures[&#39;x_test&#39;], np.argmax(data_pictures[&#39;y_test&#39;], axis=-1)
+
+    # reshape for convolutions
+    x_train = x_train.reshape((x_train.shape[0], 1, DIM, DIM))
+    x_valid = x_valid.reshape((x_valid.shape[0], 1, DIM, DIM))
+    x_test = x_test.reshape((x_test.shape[0], 1, DIM, DIM))
+
+#    print(&#34;Train samples:&#34;, x_train.shape)
+#    print(&#34;Validation samples:&#34;, x_valid.shape)
+#    print(&#34;Test samples:&#34;, x_test.shape)
+
+    return dict(x_train=np.asarray(x_train, dtype=&#39;float32&#39;),\
+        y_train=y_train.astype(&#39;int32&#39;),\
+        x_valid=np.asarray(x_valid, dtype=&#39;float32&#39;),\
+        y_valid=y_valid.astype(&#39;int32&#39;),\
+        x_test=np.asarray(x_test, dtype=&#39;float32&#39;),\
+        y_test=y_test.astype(&#39;int32&#39;),\
+        num_examples_train=x_train.shape[0],\
+        num_examples_valid=x_valid.shape[0],\
+        num_examples_test=x_test.shape[0],\
+        input_height=x_train.shape[2],\
+        input_width=x_train.shape[3],\
+        output_dim=10,)
+
+# Load data
+DATA = load_data()
+
+# Vizulaize the results
+IDX = 0
+CANVAS = np.zeros((DIM*NUM_CLASSES, NUM_CLASSES*DIM))
+for I in range(NUM_CLASSES):
+    for J in range(NUM_CLASSES):
+        CANVAS[I*DIM:(I+1)*DIM, J*DIM:(J+1) * DIM] = DATA[&#39;x_train&#39;][IDX].reshape((DIM, DIM))
+        IDX += 1
+plt.figure(figsize=(10, 10))
+plt.imshow(CANVAS, cmap=&#39;gray&#39;)
+plt.title(&#39;Cluttered handwritten digits&#39;)
+plt.axis(&#39;off&#39;)
+plt.show()
+
+
+# Defining the Convolutional Neural Network
+class Net(nn.Module):
+    &#34;&#34;&#34; Neural Network &#34;&#34;&#34;
+    def __init__(self, input_channels=1, input_height=60, input_width=60, num_classes=10,\
+                    num_zoom=3):
+        super(Net, self).__init__()
+        self.input_channels = input_channels
+        self.input_height = input_height
+        self.input_width = input_width
+        self.num_classes = num_classes
+        self.num_zoom = num_zoom
+
+        # Spatial transformer localization-network
+        # nn.Sequential http://pytorch.org/docs/master/nn.html#torch.nn.Sequential
+        #   A sequential container.
+        #   Modules will be added to it in the order they are passed in the constructor.
+        self.localization = nn.Sequential(nn.Conv2d(in_channels=input_channels,\
+            out_channels=8, kernel_size=7, padding=3), nn.MaxPool2d(kernel_size=2,\
+            stride=2), nn.ReLU(inplace=True), nn.Conv2d(in_channels=8, out_channels=10,\
+            kernel_size=5, padding=2), nn.MaxPool2d(kernel_size=2, stride=2),\
+            nn.ReLU(inplace=True))
+
+        # Regressor for the 3 * 2 affine matrix that we use
+        # to make the bilinear interpolation for the spatial transformer
+        self.fc_loc = nn.Sequential(nn.Linear(in_features=10 * input_height//4 * input_width//4,\
+            out_features=32, bias=True), nn.ReLU(inplace=True), nn.Linear(in_features=32,\
+            out_features=3 * 2, bias=True))
+
+        # Initialize the weights/bias with identity transformation
+        # see the article for a definition and explanation for this
+        self.fc_loc[2].weight.data.fill_(0)
+        self.fc_loc[2].bias.data = torch.FloatTensor([1, 0, 0, 0, 1, 0])
+
+        # The classification network based on the transformed (cropped) image
+        self.conv1 = nn.Conv2d(in_channels=input_channels, out_channels=16, kernel_size=5,\
+            padding=2)
+        self.conv2 = nn.Conv2d(in_channels=16, out_channels=32, kernel_size=5, padding=2)
+        self.conv2_drop = nn.Dropout2d()
+
+        # fully connected output layers
+        self.fc1_features = 32 * input_height//num_zoom//4 * input_width//num_zoom//4
+        self.fc1 = nn.Linear(in_features=self.fc1_features, out_features=50)
+        self.fc2 = nn.Linear(in_features=50, out_features=num_classes)
+
+    # Spatial transformer network forward function
+    def stn(self, x_picture):
+        &#34;&#34;&#34; Spatial Transformer Network &#34;&#34;&#34;
+        # creates distributed embeddings of the image with the location network.
+        x_s = self.localization(x_picture)
+        x_s = x_s.view(-1, 10 * self.input_height//4 * self.input_width//4)
+        # project from distributed embeddings to bilinear interpolation space
+        theta = self.fc_loc(x_s)
+        theta = theta.view(-1, 2, 3)
+
+        # define the output size of the cropped tensor
+        # notice that we divide the height and width with the amount of zoom
+        output_size = torch.Size((x_picture.size()[0], x_picture.size()[1],\
+            x_picture.size()[2]//self.num_zoom, x_picture.size()[3]//self.num_zoom))
+        # magic pytorch functions that are used for transformer networks
+        # http://pytorch.org/docs/master/nn.html#torch.nn.functional.affine_grid
+        grid = F.affine_grid(theta, output_size)
+        # http://pytorch.org/docs/master/nn.html#torch.nn.functional.grid_sample
+        result = F.grid_sample(x_picture, grid)
+        return result
+
+    def forward(self, x_picture):
+        # transform the input
+        x_picture = self.stn(x_picture)
+        # save transformation
+        l_trans1 = Variable(x_picture.data)
+
+        # Perform the usual forward pass
+        x_picture = F.relu(F.max_pool2d(self.conv1(x_picture), 2))
+        x_picture = F.relu(F.max_pool2d(self.conv2_drop(self.conv2(x_picture)), 2))
+        x_picture = x_picture.view(-1, self.fc1_features)
+        x_picture = F.relu(self.fc1(x_picture))
+        # note use of Functional.dropout, where training must be explicitly defined (default: False)
+        x_picture = F.dropout(x_picture, training=self.training)
+        x_picture = self.fc2(x_picture)
+        # return output and batch of bilinear interpolated images
+        return F.log_softmax(x_picture, dim=1), l_trans1
+
+
+# Print network
+print(Net())
+NET = Net()
+
+# Test forward pass on dummy data
+TEST_EXAMPLE = np.random.normal(0, 1, (45, 1, 60, 60)).astype(&#39;float32&#39;)
+TEST_EXAMPLE = Variable(torch.from_numpy(TEST_EXAMPLE))
+if torch.cuda.is_available():
+    TEST_EXAMPLE = TEST_EXAMPLE.cuda()
+OUTPUT = NET(TEST_EXAMPLE)
+print([TEST_EXAMPLE.size() for TEST_EXAMPLE in OUTPUT])
+
+
+def get_variable(x_picture):
+    &#34;&#34;&#34; Converts tensors to cuda, if available. &#34;&#34;&#34;
+    if torch.cuda.is_available():
+        return x_picture.cuda()
+    return x_picture
+
+
+def get_numpy(x_picture):
+    &#34;&#34;&#34; Get numpy array for both cuda and not. &#34;&#34;&#34;
+    if torch.cuda.is_available():
+        return x_picture.cpu().data.numpy()
+    return x_picture.data.numpy()
+
+
+def train_bayesian_optimization(net: torch.nn.Module, input_picture: DATA,\
+        label_picture: DATA, parameters: Dict[str, float],) -&gt; nn.Module:
+    &#34;&#34;&#34; Train the network on provided data set to find the optimzed hyperparamter settings.
+    Args:
+        net: initialized neural network
+        Input: The image
+        Label: Th label to the respective image
+        parameters: dictionary containing parameters to be passed to the optimizer.
+            - lr: default (0.001)
+            - momentum: default (0.0)
+            - weight_decay: default (0.0)
+            - num_epochs: default (1)
+    Returns:
+        nn.Module: trained Network
+        float: The mean cost
+        float: Accuracy &#34;&#34;&#34;
+
+    # Define the data
+    x_train = input_picture
+    y_train = label_picture
+    # Initilize network
+    net.train()
+    # Pre-locating memory
+    costs = []
+    correct = 0
+    # Define the hyperparameters
+    criteron = F.cross_entropy
+    
+    #Hyperparameter optimization
+    optimizer = optim.Adam(net.parameters(), lr=parameters.get(&#34;lr&#34;, 0.001))
+    
+    scheduler = optim.lr_scheduler.StepLR(optimizer,\
+                step_size=int(parameters.get(&#34;step_size&#34;, 20)),\
+                gamma=parameters.get(&#34;gamma&#34;, 1.0),)
+    num_epochs = parameters.get(&#34;num_epochs&#34;, 1)
+    # Get the number of samples and batches before starting trainging the network
+    num_samples = x_train.shape[0]
+    num_batches = int(np.ceil(num_samples / float(BATCH_SIZE)))
+    for _ in range(num_epochs):
+        for i in range(num_batches):
+            idx = range(i*BATCH_SIZE, np.minimum((i+1)* BATCH_SIZE, num_samples))
+            x_batch_tr = get_variable(Variable(torch.from_numpy(x_train[idx])))
+            y_batch_tr = get_variable(Variable(torch.from_numpy(y_train[idx]).long()))
+            optimizer.zero_grad()
+            output, _ = net(x_batch_tr)
+            loss = criteron(output, y_batch_tr)
+            loss.backward()
+            optimizer.step()
+            scheduler.step()
+            costs.append(get_numpy(loss))
+            preds = np.argmax(get_numpy(output), axis=-1)
+            correct += np.sum(get_numpy(y_batch_tr) == preds)
+    mean_cost = np.mean(costs)
+    accuracy = correct / float(num_samples)
+    return net, mean_cost, accuracy
+
+def eval_bayesian_optimization(net: torch.nn.Module, input_picture: DATA,\
+        label_picture: DATA, ) -&gt; float:
+    &#34;&#34;&#34; Compute classification accuracy on provided dataset to find the optimzed hyperparamter
+        settings.
+    Args:
+        net: trained neural network
+        Input: The image
+        Label: Th label to the respective image
+    Returns:
+        float: classification accuracy &#34;&#34;&#34;
+    # Define the data
+    x_valid = input_picture
+    y_valid = label_picture
+    # Pre-locating memory
+    correct = 0
+    # Get the number of samples and batches before testing the network
+    num_samples = x_valid.shape[0]
+    num_batches = int(np.ceil(num_samples / float(BATCH_SIZE)))
+    net.eval()
+    with torch.no_grad():
+        for i in range(num_batches):
+            idx = range(i*BATCH_SIZE, np.minimum((i+1) * BATCH_SIZE, num_samples))
+            x_batch_val = get_variable(Variable(torch.from_numpy(x_valid[idx])))
+            y_batch_val = get_variable(Variable(torch.from_numpy(y_valid[idx]).long()))
+            output, _ = net(x_batch_val)
+            _, predicted = torch.max(output.data, 1)
+            correct += (predicted == y_batch_val).float().mean()
+    # Calculating the accuracy
+    return float(correct/num_batches)
+
+def evaluate_hyperparameters(parameterization):
+    &#34;&#34;&#34; Train and evaluate the network to find the best parameters
+    Args:
+        parameterization: The hyperparameters that should be evaluated
+    Returns:
+        float: classification accuracy &#34;&#34;&#34;
+    net = Net()
+    net, _, _ = train_bayesian_optimization(net=net, input_picture=DATA[&#39;x_train&#39;],\
+            label_picture=DATA[&#39;y_train&#39;], parameters=parameterization,)
+    return eval_bayesian_optimization(net=net, input_picture=DATA[&#39;x_valid&#39;],\
+            label_picture=DATA[&#39;y_valid&#39;],)
+            
+# Optimizating the network with bayesian optimization
+#BEST_PARAMETERS, VALUES, EXPERIMENT, MODEL = optimize(parameters=[{&#34;name&#34;: &#34;lr&#34;,\
+#                    &#34;type&#34;: &#34;range&#34;,&#34;bounds&#34;: [1e-6, 0.4], &#34;log_scale&#34;: True},],\
+#                     evaluation_function=evaluate_hyperparameters,\
+#                    objective_name=&#39;accuracy&#39;,)
+
+
+# Saving the results from the optimization
+#MEANS, COVARIANCES = VALUES
+
+# Printing the results of the hyperparamter optimization
+#print(BEST_PARAMETERS)
+#print(MEANS, COVARIANCES)
+
+# Findin the best hyperparameter for training the network
+#DATA1 = EXPERIMENT.fetch_data()
+#DF = DATA1.df
+#BEST_ARM_NAME = DF.arm_name[DF[&#39;mean&#39;] == DF[&#39;mean&#39;].max()].values[0]
+#BEST_ARM = EXPERIMENT.arms_by_name[BEST_ARM_NAME]
+
+# Parameters used under non-hyperparameter optimization
+class Parameters:
+    &#34;&#34;&#34; Parameters used to test the code &#34;&#34;&#34;
+    parameters = {}
+    parameters[&#34;lr&#34;] = 0.001
+    parameters[&#34;momentum&#34;] = 0.001
+    parameters[&#34;weight_decay&#34;] = 0.001
+    parameters[&#34;step_size&#34;] = 20
+    parameters[&#34;gamma&#34;] = 1.0
+    parameters[&#34;num_epochs&#34;] = 1
+BEST_ARM = Parameters()
+
+#Make a new network with random weights
+random.seed()
+NET = Net()
+random.seed()
+NET = Net()
+
+# Saving the results from the optimization
+VALID_ACCS, TRAIN_ACCS, TEST_ACCS, TRAIN_COSTS = [], [], [], []
+
+
+# Training the network for a specific number of epochs
+N = 0
+while N &lt; NUM_EPOCHS:
+    N += 1
+    try:
+        print(&#34;Epoch %d:&#34; % N)
+        # Training the network
+        NET, TRAIN_COST, TRAIN_ACC = train_bayesian_optimization(net=NET,\
+                                        input_picture=DATA[&#39;x_train&#39;],\
+                                        label_picture=DATA[&#39;y_train&#39;],\
+                                        parameters=BEST_ARM.parameters,)
+        # Validation the network
+        VALID_ACC = eval_bayesian_optimization(net=NET,\
+                                        input_picture=DATA[&#39;x_valid&#39;],\
+                                        label_picture=DATA[&#39;y_valid&#39;],)
+        # Testing the network
+        TEST_ACC = eval_bayesian_optimization(net=NET,\
+                                        input_picture=DATA[&#39;x_test&#39;],\
+                                        label_picture=DATA[&#39;y_test&#39;],)
+        # Saving the results
+        VALID_ACCS += [VALID_ACC]
+        TEST_ACCS += [TEST_ACC]
+        TRAIN_ACCS += [TRAIN_ACC]
+        TRAIN_COSTS += [TRAIN_COST]
+        
+        # Printing the results
+        print(&#34;train cost {0:.2}, train acc {1:.2}, val acc {2:.2}, test acc {3:.2}&#34;.format(
+            TRAIN_COST, TRAIN_ACC, VALID_ACC, TEST_ACC))
+    except KeyboardInterrupt:
+        print(&#39;\nKeyboardInterrupt&#39;)
+        break
+
+# Printing the results
+plt.figure(figsize=(9, 9))
+plt.plot(1-np.array(TRAIN_ACCS), label=&#39;Training Error&#39;)
+plt.plot(1-np.array(VALID_ACCS), label=&#39;Validation Error&#39;)
+plt.plot(1-np.array(TEST_ACCS), label=&#39;Test Error&#39;)
+
+plt.legend(fontsize=20)
+plt.xlabel(&#39;Epoch&#39;, fontsize=20)
+plt.ylabel(&#39;Error&#39;, fontsize=20)
+plt.show()</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="Running_HO_on_CNN_doc.eval_bayesian_optimization"><code class="name flex">
+<span>def <span class="ident">eval_bayesian_optimization</span></span>(<span>net: torch.nn.modules.module.Module, input_picture: {'x_train': array([[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+...,
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]]], dtype=float32), 'y_train': array([8, 0, 2, ..., 0, 9, 7], dtype=int32), 'x_valid': array([[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+...,
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]]], dtype=float32), 'y_valid': array([4, 0, 5, ..., 6, 2, 6], dtype=int32), 'x_test': array([[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+...,
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]]], dtype=float32), 'y_test': array([3, 9, 4, ..., 6, 3, 5], dtype=int32), 'num_examples_train': 50000, 'num_examples_valid': 10000, 'num_examples_test': 10000, 'input_height': 60, 'input_width': 60, 'output_dim': 10}, label_picture: {'x_train': array([[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+...,
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]]], dtype=float32), 'y_train': array([8, 0, 2, ..., 0, 9, 7], dtype=int32), 'x_valid': array([[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+...,
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]]], dtype=float32), 'y_valid': array([4, 0, 5, ..., 6, 2, 6], dtype=int32), 'x_test': array([[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+...,
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]]], dtype=float32), 'y_test': array([3, 9, 4, ..., 6, 3, 5], dtype=int32), 'num_examples_train': 50000, 'num_examples_valid': 10000, 'num_examples_test': 10000, 'input_height': 60, 'input_width': 60, 'output_dim': 10}) -> float</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Compute classification accuracy on provided dataset to find the optimzed hyperparamter
+settings.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>net</code></strong></dt>
+<dd>trained neural network</dd>
+<dt><strong><code>Input</code></strong></dt>
+<dd>The image</dd>
+<dt><strong><code>Label</code></strong></dt>
+<dd>Th label to the respective image</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>float</code></dt>
+<dd>classification accuracy</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def eval_bayesian_optimization(net: torch.nn.Module, input_picture: DATA,\
+        label_picture: DATA, ) -&gt; float:
+    &#34;&#34;&#34; Compute classification accuracy on provided dataset to find the optimzed hyperparamter
+        settings.
+    Args:
+        net: trained neural network
+        Input: The image
+        Label: Th label to the respective image
+    Returns:
+        float: classification accuracy &#34;&#34;&#34;
+    # Define the data
+    x_valid = input_picture
+    y_valid = label_picture
+    # Pre-locating memory
+    correct = 0
+    # Get the number of samples and batches before testing the network
+    num_samples = x_valid.shape[0]
+    num_batches = int(np.ceil(num_samples / float(BATCH_SIZE)))
+    net.eval()
+    with torch.no_grad():
+        for i in range(num_batches):
+            idx = range(i*BATCH_SIZE, np.minimum((i+1) * BATCH_SIZE, num_samples))
+            x_batch_val = get_variable(Variable(torch.from_numpy(x_valid[idx])))
+            y_batch_val = get_variable(Variable(torch.from_numpy(y_valid[idx]).long()))
+            output, _ = net(x_batch_val)
+            _, predicted = torch.max(output.data, 1)
+            correct += (predicted == y_batch_val).float().mean()
+    # Calculating the accuracy
+    return float(correct/num_batches)</code></pre>
+</details>
+</dd>
+<dt id="Running_HO_on_CNN_doc.evaluate_hyperparameters"><code class="name flex">
+<span>def <span class="ident">evaluate_hyperparameters</span></span>(<span>parameterization)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Train and evaluate the network to find the best parameters</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>parameterization</code></strong></dt>
+<dd>The hyperparameters that should be evaluated</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>float</code></dt>
+<dd>classification accuracy</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def evaluate_hyperparameters(parameterization):
+    &#34;&#34;&#34; Train and evaluate the network to find the best parameters
+    Args:
+        parameterization: The hyperparameters that should be evaluated
+    Returns:
+        float: classification accuracy &#34;&#34;&#34;
+    net = Net()
+    net, _, _ = train_bayesian_optimization(net=net, input_picture=DATA[&#39;x_train&#39;],\
+            label_picture=DATA[&#39;y_train&#39;], parameters=parameterization,)
+    return eval_bayesian_optimization(net=net, input_picture=DATA[&#39;x_valid&#39;],\
+            label_picture=DATA[&#39;y_valid&#39;],)</code></pre>
+</details>
+</dd>
+<dt id="Running_HO_on_CNN_doc.get_numpy"><code class="name flex">
+<span>def <span class="ident">get_numpy</span></span>(<span>x_picture)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Get numpy array for both cuda and not.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_numpy(x_picture):
+    &#34;&#34;&#34; Get numpy array for both cuda and not. &#34;&#34;&#34;
+    if torch.cuda.is_available():
+        return x_picture.cpu().data.numpy()
+    return x_picture.data.numpy()</code></pre>
+</details>
+</dd>
+<dt id="Running_HO_on_CNN_doc.get_variable"><code class="name flex">
+<span>def <span class="ident">get_variable</span></span>(<span>x_picture)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Converts tensors to cuda, if available.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_variable(x_picture):
+    &#34;&#34;&#34; Converts tensors to cuda, if available. &#34;&#34;&#34;
+    if torch.cuda.is_available():
+        return x_picture.cuda()
+    return x_picture</code></pre>
+</details>
+</dd>
+<dt id="Running_HO_on_CNN_doc.load_data"><code class="name flex">
+<span>def <span class="ident">load_data</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Load the npz-map and sort the data in a train, valid and test datset.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>None</code></strong></dt>
+<dd>&nbsp;</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>dict</code></dt>
+<dd>A dictionary with the data sorted.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def load_data():
+    &#34;&#34;&#34; Load the npz-map and sort the data in a train, valid and test datset.
+    Args:
+        None
+    Returns:
+        dict: A dictionary with the data sorted. &#34;&#34;&#34;
+
+    data_pictures = np.load(MNIST_C)
+    x_train, y_train = data_pictures[&#39;x_train&#39;], np.argmax(data_pictures[&#39;y_train&#39;], axis=-1)
+    x_valid, y_valid = data_pictures[&#39;x_valid&#39;], np.argmax(data_pictures[&#39;y_valid&#39;], axis=-1)
+    x_test, y_test = data_pictures[&#39;x_test&#39;], np.argmax(data_pictures[&#39;y_test&#39;], axis=-1)
+
+    # reshape for convolutions
+    x_train = x_train.reshape((x_train.shape[0], 1, DIM, DIM))
+    x_valid = x_valid.reshape((x_valid.shape[0], 1, DIM, DIM))
+    x_test = x_test.reshape((x_test.shape[0], 1, DIM, DIM))
+
+#    print(&#34;Train samples:&#34;, x_train.shape)
+#    print(&#34;Validation samples:&#34;, x_valid.shape)
+#    print(&#34;Test samples:&#34;, x_test.shape)
+
+    return dict(x_train=np.asarray(x_train, dtype=&#39;float32&#39;),\
+        y_train=y_train.astype(&#39;int32&#39;),\
+        x_valid=np.asarray(x_valid, dtype=&#39;float32&#39;),\
+        y_valid=y_valid.astype(&#39;int32&#39;),\
+        x_test=np.asarray(x_test, dtype=&#39;float32&#39;),\
+        y_test=y_test.astype(&#39;int32&#39;),\
+        num_examples_train=x_train.shape[0],\
+        num_examples_valid=x_valid.shape[0],\
+        num_examples_test=x_test.shape[0],\
+        input_height=x_train.shape[2],\
+        input_width=x_train.shape[3],\
+        output_dim=10,)</code></pre>
+</details>
+</dd>
+<dt id="Running_HO_on_CNN_doc.train_bayesian_optimization"><code class="name flex">
+<span>def <span class="ident">train_bayesian_optimization</span></span>(<span>net: torch.nn.modules.module.Module, input_picture: {'x_train': array([[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+...,
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]]], dtype=float32), 'y_train': array([8, 0, 2, ..., 0, 9, 7], dtype=int32), 'x_valid': array([[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+...,
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]]], dtype=float32), 'y_valid': array([4, 0, 5, ..., 6, 2, 6], dtype=int32), 'x_test': array([[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+...,
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]]], dtype=float32), 'y_test': array([3, 9, 4, ..., 6, 3, 5], dtype=int32), 'num_examples_train': 50000, 'num_examples_valid': 10000, 'num_examples_test': 10000, 'input_height': 60, 'input_width': 60, 'output_dim': 10}, label_picture: {'x_train': array([[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+...,
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]]], dtype=float32), 'y_train': array([8, 0, 2, ..., 0, 9, 7], dtype=int32), 'x_valid': array([[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+...,
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]]], dtype=float32), 'y_valid': array([4, 0, 5, ..., 6, 2, 6], dtype=int32), 'x_test': array([[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+...,
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]],
+[[[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+...,
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.],
+[0., 0., 0., ..., 0., 0., 0.]]]], dtype=float32), 'y_test': array([3, 9, 4, ..., 6, 3, 5], dtype=int32), 'num_examples_train': 50000, 'num_examples_valid': 10000, 'num_examples_test': 10000, 'input_height': 60, 'input_width': 60, 'output_dim': 10}, parameters: Dict[str, float]) -> torch.nn.modules.module.Module</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Train the network on provided data set to find the optimzed hyperparamter settings.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>net</code></strong></dt>
+<dd>initialized neural network</dd>
+<dt><strong><code>Input</code></strong></dt>
+<dd>The image</dd>
+<dt><strong><code>Label</code></strong></dt>
+<dd>Th label to the respective image</dd>
+<dt><strong><code>parameters</code></strong></dt>
+<dd>dictionary containing parameters to be passed to the optimizer.
+- lr: default (0.001)
+- momentum: default (0.0)
+- weight_decay: default (0.0)
+- num_epochs: default (1)</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>nn.Module</code></dt>
+<dd>trained Network</dd>
+<dt><code>float</code></dt>
+<dd>The mean cost</dd>
+<dt><code>float</code></dt>
+<dd>Accuracy</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def train_bayesian_optimization(net: torch.nn.Module, input_picture: DATA,\
+        label_picture: DATA, parameters: Dict[str, float],) -&gt; nn.Module:
+    &#34;&#34;&#34; Train the network on provided data set to find the optimzed hyperparamter settings.
+    Args:
+        net: initialized neural network
+        Input: The image
+        Label: Th label to the respective image
+        parameters: dictionary containing parameters to be passed to the optimizer.
+            - lr: default (0.001)
+            - momentum: default (0.0)
+            - weight_decay: default (0.0)
+            - num_epochs: default (1)
+    Returns:
+        nn.Module: trained Network
+        float: The mean cost
+        float: Accuracy &#34;&#34;&#34;
+
+    # Define the data
+    x_train = input_picture
+    y_train = label_picture
+    # Initilize network
+    net.train()
+    # Pre-locating memory
+    costs = []
+    correct = 0
+    # Define the hyperparameters
+    criteron = F.cross_entropy
+    
+    #Hyperparameter optimization
+    optimizer = optim.Adam(net.parameters(), lr=parameters.get(&#34;lr&#34;, 0.001))
+    
+    scheduler = optim.lr_scheduler.StepLR(optimizer,\
+                step_size=int(parameters.get(&#34;step_size&#34;, 20)),\
+                gamma=parameters.get(&#34;gamma&#34;, 1.0),)
+    num_epochs = parameters.get(&#34;num_epochs&#34;, 1)
+    # Get the number of samples and batches before starting trainging the network
+    num_samples = x_train.shape[0]
+    num_batches = int(np.ceil(num_samples / float(BATCH_SIZE)))
+    for _ in range(num_epochs):
+        for i in range(num_batches):
+            idx = range(i*BATCH_SIZE, np.minimum((i+1)* BATCH_SIZE, num_samples))
+            x_batch_tr = get_variable(Variable(torch.from_numpy(x_train[idx])))
+            y_batch_tr = get_variable(Variable(torch.from_numpy(y_train[idx]).long()))
+            optimizer.zero_grad()
+            output, _ = net(x_batch_tr)
+            loss = criteron(output, y_batch_tr)
+            loss.backward()
+            optimizer.step()
+            scheduler.step()
+            costs.append(get_numpy(loss))
+            preds = np.argmax(get_numpy(output), axis=-1)
+            correct += np.sum(get_numpy(y_batch_tr) == preds)
+    mean_cost = np.mean(costs)
+    accuracy = correct / float(num_samples)
+    return net, mean_cost, accuracy</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="Running_HO_on_CNN_doc.Net"><code class="flex name class">
+<span>class <span class="ident">Net</span></span>
+<span>(</span><span>input_channels=1, input_height=60, input_width=60, num_classes=10, num_zoom=3)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Neural Network </p>
+<p>Initializes internal Module state, shared by both nn.Module and ScriptModule.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Net(nn.Module):
+    &#34;&#34;&#34; Neural Network &#34;&#34;&#34;
+    def __init__(self, input_channels=1, input_height=60, input_width=60, num_classes=10,\
+                    num_zoom=3):
+        super(Net, self).__init__()
+        self.input_channels = input_channels
+        self.input_height = input_height
+        self.input_width = input_width
+        self.num_classes = num_classes
+        self.num_zoom = num_zoom
+
+        # Spatial transformer localization-network
+        # nn.Sequential http://pytorch.org/docs/master/nn.html#torch.nn.Sequential
+        #   A sequential container.
+        #   Modules will be added to it in the order they are passed in the constructor.
+        self.localization = nn.Sequential(nn.Conv2d(in_channels=input_channels,\
+            out_channels=8, kernel_size=7, padding=3), nn.MaxPool2d(kernel_size=2,\
+            stride=2), nn.ReLU(inplace=True), nn.Conv2d(in_channels=8, out_channels=10,\
+            kernel_size=5, padding=2), nn.MaxPool2d(kernel_size=2, stride=2),\
+            nn.ReLU(inplace=True))
+
+        # Regressor for the 3 * 2 affine matrix that we use
+        # to make the bilinear interpolation for the spatial transformer
+        self.fc_loc = nn.Sequential(nn.Linear(in_features=10 * input_height//4 * input_width//4,\
+            out_features=32, bias=True), nn.ReLU(inplace=True), nn.Linear(in_features=32,\
+            out_features=3 * 2, bias=True))
+
+        # Initialize the weights/bias with identity transformation
+        # see the article for a definition and explanation for this
+        self.fc_loc[2].weight.data.fill_(0)
+        self.fc_loc[2].bias.data = torch.FloatTensor([1, 0, 0, 0, 1, 0])
+
+        # The classification network based on the transformed (cropped) image
+        self.conv1 = nn.Conv2d(in_channels=input_channels, out_channels=16, kernel_size=5,\
+            padding=2)
+        self.conv2 = nn.Conv2d(in_channels=16, out_channels=32, kernel_size=5, padding=2)
+        self.conv2_drop = nn.Dropout2d()
+
+        # fully connected output layers
+        self.fc1_features = 32 * input_height//num_zoom//4 * input_width//num_zoom//4
+        self.fc1 = nn.Linear(in_features=self.fc1_features, out_features=50)
+        self.fc2 = nn.Linear(in_features=50, out_features=num_classes)
+
+    # Spatial transformer network forward function
+    def stn(self, x_picture):
+        &#34;&#34;&#34; Spatial Transformer Network &#34;&#34;&#34;
+        # creates distributed embeddings of the image with the location network.
+        x_s = self.localization(x_picture)
+        x_s = x_s.view(-1, 10 * self.input_height//4 * self.input_width//4)
+        # project from distributed embeddings to bilinear interpolation space
+        theta = self.fc_loc(x_s)
+        theta = theta.view(-1, 2, 3)
+
+        # define the output size of the cropped tensor
+        # notice that we divide the height and width with the amount of zoom
+        output_size = torch.Size((x_picture.size()[0], x_picture.size()[1],\
+            x_picture.size()[2]//self.num_zoom, x_picture.size()[3]//self.num_zoom))
+        # magic pytorch functions that are used for transformer networks
+        # http://pytorch.org/docs/master/nn.html#torch.nn.functional.affine_grid
+        grid = F.affine_grid(theta, output_size)
+        # http://pytorch.org/docs/master/nn.html#torch.nn.functional.grid_sample
+        result = F.grid_sample(x_picture, grid)
+        return result
+
+    def forward(self, x_picture):
+        # transform the input
+        x_picture = self.stn(x_picture)
+        # save transformation
+        l_trans1 = Variable(x_picture.data)
+
+        # Perform the usual forward pass
+        x_picture = F.relu(F.max_pool2d(self.conv1(x_picture), 2))
+        x_picture = F.relu(F.max_pool2d(self.conv2_drop(self.conv2(x_picture)), 2))
+        x_picture = x_picture.view(-1, self.fc1_features)
+        x_picture = F.relu(self.fc1(x_picture))
+        # note use of Functional.dropout, where training must be explicitly defined (default: False)
+        x_picture = F.dropout(x_picture, training=self.training)
+        x_picture = self.fc2(x_picture)
+        # return output and batch of bilinear interpolated images
+        return F.log_softmax(x_picture, dim=1), l_trans1</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>torch.nn.modules.module.Module</li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="Running_HO_on_CNN_doc.Net.forward"><code class="name flex">
+<span>def <span class="ident">forward</span></span>(<span>self, x_picture)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the :class:<code>Module</code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def forward(self, x_picture):
+    # transform the input
+    x_picture = self.stn(x_picture)
+    # save transformation
+    l_trans1 = Variable(x_picture.data)
+
+    # Perform the usual forward pass
+    x_picture = F.relu(F.max_pool2d(self.conv1(x_picture), 2))
+    x_picture = F.relu(F.max_pool2d(self.conv2_drop(self.conv2(x_picture)), 2))
+    x_picture = x_picture.view(-1, self.fc1_features)
+    x_picture = F.relu(self.fc1(x_picture))
+    # note use of Functional.dropout, where training must be explicitly defined (default: False)
+    x_picture = F.dropout(x_picture, training=self.training)
+    x_picture = self.fc2(x_picture)
+    # return output and batch of bilinear interpolated images
+    return F.log_softmax(x_picture, dim=1), l_trans1</code></pre>
+</details>
+</dd>
+<dt id="Running_HO_on_CNN_doc.Net.stn"><code class="name flex">
+<span>def <span class="ident">stn</span></span>(<span>self, x_picture)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Spatial Transformer Network</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def stn(self, x_picture):
+    &#34;&#34;&#34; Spatial Transformer Network &#34;&#34;&#34;
+    # creates distributed embeddings of the image with the location network.
+    x_s = self.localization(x_picture)
+    x_s = x_s.view(-1, 10 * self.input_height//4 * self.input_width//4)
+    # project from distributed embeddings to bilinear interpolation space
+    theta = self.fc_loc(x_s)
+    theta = theta.view(-1, 2, 3)
+
+    # define the output size of the cropped tensor
+    # notice that we divide the height and width with the amount of zoom
+    output_size = torch.Size((x_picture.size()[0], x_picture.size()[1],\
+        x_picture.size()[2]//self.num_zoom, x_picture.size()[3]//self.num_zoom))
+    # magic pytorch functions that are used for transformer networks
+    # http://pytorch.org/docs/master/nn.html#torch.nn.functional.affine_grid
+    grid = F.affine_grid(theta, output_size)
+    # http://pytorch.org/docs/master/nn.html#torch.nn.functional.grid_sample
+    result = F.grid_sample(x_picture, grid)
+    return result</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="Running_HO_on_CNN_doc.Parameters"><code class="flex name class">
+<span>class <span class="ident">Parameters</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Parameters used to test the code</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Parameters:
+    &#34;&#34;&#34; Parameters used to test the code &#34;&#34;&#34;
+    parameters = {}
+    parameters[&#34;lr&#34;] = 0.001
+    parameters[&#34;momentum&#34;] = 0.001
+    parameters[&#34;weight_decay&#34;] = 0.001
+    parameters[&#34;step_size&#34;] = 20
+    parameters[&#34;gamma&#34;] = 1.0
+    parameters[&#34;num_epochs&#34;] = 1</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="Running_HO_on_CNN_doc.Parameters.parameters"><code class="name">var <span class="ident">parameters</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="Running_HO_on_CNN_doc.eval_bayesian_optimization" href="#Running_HO_on_CNN_doc.eval_bayesian_optimization">eval_bayesian_optimization</a></code></li>
+<li><code><a title="Running_HO_on_CNN_doc.evaluate_hyperparameters" href="#Running_HO_on_CNN_doc.evaluate_hyperparameters">evaluate_hyperparameters</a></code></li>
+<li><code><a title="Running_HO_on_CNN_doc.get_numpy" href="#Running_HO_on_CNN_doc.get_numpy">get_numpy</a></code></li>
+<li><code><a title="Running_HO_on_CNN_doc.get_variable" href="#Running_HO_on_CNN_doc.get_variable">get_variable</a></code></li>
+<li><code><a title="Running_HO_on_CNN_doc.load_data" href="#Running_HO_on_CNN_doc.load_data">load_data</a></code></li>
+<li><code><a title="Running_HO_on_CNN_doc.train_bayesian_optimization" href="#Running_HO_on_CNN_doc.train_bayesian_optimization">train_bayesian_optimization</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="Running_HO_on_CNN_doc.Net" href="#Running_HO_on_CNN_doc.Net">Net</a></code></h4>
+<ul class="">
+<li><code><a title="Running_HO_on_CNN_doc.Net.forward" href="#Running_HO_on_CNN_doc.Net.forward">forward</a></code></li>
+<li><code><a title="Running_HO_on_CNN_doc.Net.stn" href="#Running_HO_on_CNN_doc.Net.stn">stn</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="Running_HO_on_CNN_doc.Parameters" href="#Running_HO_on_CNN_doc.Parameters">Parameters</a></code></h4>
+<ul class="">
+<li><code><a title="Running_HO_on_CNN_doc.Parameters.parameters" href="#Running_HO_on_CNN_doc.Parameters.parameters">parameters</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.8.1</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

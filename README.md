@@ -86,13 +86,6 @@ Or <br/>
 Open the terminal and make sure you are in the 
 "cmse802_spring2020_hyperparamterop"- folder. <br/>
 Then run:  <br/>
-    - pip install ./Software/requirements.txt  <br/>
-
-Or
-
-Open the terminal and make sure you are in the 
-"cmse802_spring2020_hyperparamterop"- folder. <br/>
-Then run:  <br/>
     - make init  <br/>
     - conda activate ./envs  <br/>
 
@@ -142,3 +135,7 @@ The video presentation can be seen at: https://youtu.be/WCORT4HQZpU
 [7] L.B. Nascimento, A.C. De Paiva, and A.C. Silva. “Lung nodules classificationin CT images using Shannon and Simpson Diversity Indices and SVM”. In:volume 7376. 2012, pages 454–466.isbn: 9783642315367.<br/>
 [8] Hargrave, Marschall. 2019. “Deep Learning.” April 30. https://www.investopedia.com/terms/d/deep-learning.asp.<br/>
 [9] Aravikumar, Meghan. 2018. "Let’s Talk Bayesian Optimization." November 16. https://mlconf.com/blog/lets-talk-bayesian-optimization/.
+
+# Note #
+
+There are more python files made for the code. They are respectively used for the main code, unit test, linting, and documentation. In testing, a separate python file is made, so Bayesian optimization and training are not done. This would take half an hour if a separate file the main functions were not made. The auto-documentation also has to be used with a separate python file, since it cannot handle the ax module. Thus, a separate file is also made.

@@ -27,7 +27,7 @@ doc:
 
 
 lint:
-	pylint $(MODULENAME)
+	pylint --disable=no-member $(MODULENAME)
 
 test:
 	python ./Hyperparameter_Optimization/test_Running_HO_on_CNN.py
