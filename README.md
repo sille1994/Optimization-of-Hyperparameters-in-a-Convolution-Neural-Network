@@ -63,29 +63,30 @@ hyperparameter(s).
 # Running the programe #
 
 Installing: 
+Use one of the following ways to install the packages used in Python. Python version 3.7 is used in this project.
 
-conda install pytorch torchvision cpuonly -c pytorch<br/>
-conda install numpy==1.16.1<br/>
-conda install matplotlib==3.1.0<br/>
-conda install botorch -c pytorch -c gpytorch<br/>
-pip install ax-platform<br/>
 
-Torch and Torchvison should be respectively the version  1.3.1
-and 0.4.2.
-
+Open the terminal and rhen run:<br/>
+    - conda install pytorch torchvision cpuonly -c pytorch<br/>
+    - conda install numpy==1.16.1<br/>
+    - conda install matplotlib==3.1.0<br/>
+    - conda install botorch -c pytorch -c gpytorch<br/>
+    - pip install ax-platform<br/>
 
 Or 
 
-conda env create --prefix ./envs --file ./Software/requirements.yml<br/>
-conda activate ./envs<br/>
-
-To delete the environment: <br/>
-conda deactivate<br/>
-rm -rf ./envs<br/>
+Open the terminal and make sure you are in the 
+"cmse802_spring2020_hyperparamterop"- folder. <br/>
+Then run:  <br/>
+    - conda env create --prefix ./envs --file ./Software/requirements.yml<br/>
+    - conda activate ./envs<br/>
 
 Or <br/>
 
-pip install ./Software/requirements.txt  <br/>
+Open the terminal and make sure you are in the 
+"cmse802_spring2020_hyperparamterop"- folder. <br/>
+Then run:  <br/>
+    - pip install ./Software/requirements.txt  <br/>
 
 Or
 
