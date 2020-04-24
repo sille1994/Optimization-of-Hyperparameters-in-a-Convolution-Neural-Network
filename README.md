@@ -43,21 +43,21 @@ Updated to Pytorch: https://github.com/DeepLearningDTU/02456-deep-learning-with-
 
 # Bayesian Optimization #
 
-Bayesian Optimization (BO) is a methods to maximize the evaluating of "black 
-box" functions, this could be Machine Learning or Deep Learning algorithms, 
-without having acces to these algorithms. Thus, BO takes the algorithm and test 
-it at a sequence of test points to determine the optimal values for e.g. 
-hyperparamters [9].
 
-This is done by approximations, since we cannot solve the problem analyticly. 
-The approximation is a surregate model (a probabilistic model) based om the 
-results with the associated hyperparameter. Here, a Gaussian model is fitted to 
-the outcome. This will give us a mean and vairance. An acquisition function is 
-then used to look at different trade-offs of picking known maximas and explore 
-uncertain locations in the hyperparamter space. These steps are iterated, thus 
-we should get a better and better approximation until the maximum number of 
-ietrations is met [9] . The best results can then be found with the respictive 
-hyperparameter(s).
+
+
+<img src="https://miro.medium.com/max/1400/1*PhKGj_bZlND8IEfII426wA.png" width="50%">
+
+<p style="text-align: right;">Image from: https://towardsdatascience.com/shallow-understanding-on-bayesian-optimization-324b6c1f7083 </p>
+
+
+Bayesian Optimization (BO) is a methods to maximize the evaluating of "black box" functions, this could be Machine Learning or Deep Learning algorithms, without having acces to these algorithms. Thus, BO takes the algorithm and test it at a sequence of test points to determine the optimal values for e.g. hyperparamters [9]. 
+
+This is done by approximations, since we cannot solve the problem analyticly. The approximation is a surregate model (a probabilistic model) based om the results with the associated hyperparameter. Here, a Gaussian model is fitted to the outcome. This will give us a mean and the standard deviation (posterior mean and standard uncertainty). An acquisition function is then  used to look at different trade-offs of picking known maximas and explore uncertain locations  in the hyperparamter space. These steps are iterated, thus we should get a better and better approximation until the maximum number of iterations is met. The best results can then be found with the respictive hyperparameter(s) [9]. 
+
+In this project the module called Ax (Adaptive Experimentation Platform) is used to perform BO in Python. The results could look like this
+
+<img src="images/renderplot.png" />
 
 
 # Running the programe #
