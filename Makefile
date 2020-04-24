@@ -19,7 +19,7 @@ help:
 	
 
 init:
-	conda env create --prefix ./envs --file environment.yml
+	conda env create --prefix ./envs --file ./Software/environment.yml
 term:
 	rm -rf ./envs
 doc:
