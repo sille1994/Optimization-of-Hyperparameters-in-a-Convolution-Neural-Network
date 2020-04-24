@@ -68,15 +68,11 @@ Citing: https://mlconf.com/blog/lets-talk-bayesian-optimization/
 
 Installing: 
 
-conda install pytorch torchvision cpuonly -c pytorch
-
-conda install numpy==1.16.1
-
-conda install matplotlib==3.1.0
-
-conda install botorch -c pytorch -c gpytorch
-
-pip install ax-platform
+conda install pytorch torchvision cpuonly -c pytorch<br/>
+conda install numpy==1.16.1<br/>
+conda install matplotlib==3.1.0<br/>
+conda install botorch -c pytorch -c gpytorch<br/>
+pip install ax-platform<br/>
 
 Torch and Torchvison should be respectively the version  1.3.1
 and 0.4.2.
@@ -93,23 +89,46 @@ rm -rf ./envs<br/>
 
 Or <br/>
 
-pip install -r requirements.txt
+pip install -r requirements.txt  <br/>
+
+Or
+
+Open the terminal and make sure you are in the 
+"cmse802_spring2020_hyperparamterop"- folder. <br/>
+Then run: 
+    - make init
+    - conda activate ./envs
+
 
 # #
 
 To run the unit test;
 Open the terminal and make sure you are in the 
-"Hyperparameter_Optimization"- folder. 
-Then run: "python test_Running_HO_on_CNN.py"
+"cmse802_spring2020_hyperparamterop"- folder. <br/>
+Then run: make test
 
 # #
 To run pylint:<br/>
-Pylint has troubles with Torch. There is no<br/>
+Pylint has troubles with Torch. There is no
 [solution](https://github.com/pytorch/pytorch/issues/701), thus
---disable=no-member is added.
+--disable=no-member is added.<br/>
 Open the terminal and make sure you are in the 
-"cmse802_spring2020_hyperparamterop"- folder. 
-Ten run: pylint --disable=no-member Hyperparameter_Optimization
+"cmse802_spring2020_hyperparamterop"- folder. <br/>
+Then run: make lint
+
+##
+
+To make the documentation:<br/>
+Open the terminal and make sure you are in the 
+"cmse802_spring2020_hyperparamterop"- folder. <br/>
+Then run: make doc
+
+##
+
+To run the code:<br/>
+Open the terminal and make sure you are in the 
+"cmse802_spring2020_hyperparamterop"- folder. <br/>
+Then run: make runcode
 
 # #
 
