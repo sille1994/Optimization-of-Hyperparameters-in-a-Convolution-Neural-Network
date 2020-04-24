@@ -84,12 +84,16 @@ and 0.4.2.
 
 Or 
 
-conda env create --prefix ./envs --file requirements.yml
-conda activate ./envs
+conda env create --prefix ./envs --file requirements.yml<br/>
+conda activate ./envs<br/>
 
-To delete the environment: 
-conda deactivate
-rm -rf ./envs
+To delete the environment: <br/>
+conda deactivate<br/>
+rm -rf ./envs<br/>
+
+Or <br/>
+
+pip install -r requirements.txt
 
 # #
 
@@ -99,8 +103,8 @@ Open the terminal and make sure you are in the
 Then run: "python test_Running_HO_on_CNN.py"
 
 # #
-To run pylint:
-Pylint has troubles with Torch. There is no
+To run pylint:<br/>
+Pylint has troubles with Torch. There is no<br/>
 [solution](https://github.com/pytorch/pytorch/issues/701), thus
 --disable=no-member is added.
 Open the terminal and make sure you are in the 
