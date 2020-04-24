@@ -23,7 +23,7 @@ init:
 term:
 	rm -rf ./envs
 doc:
-	pdoc --html --html-dir ./doc --overwrite ./Hyperparameter_Optimization/Running_HO_on_CNN_doc.py
+	pdoc --html --html-dir ./Documentation --overwrite ./Hyperparameter_Optimization/Running_HO_on_CNN_doc.py
 
 
 lint:
