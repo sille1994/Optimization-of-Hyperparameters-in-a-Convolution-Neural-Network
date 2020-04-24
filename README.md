@@ -140,8 +140,4 @@ The video presentation can be seen at: https://youtu.be/WCORT4HQZpU
 [6] Carmen Krewer et al. “Immediate effectiveness of single-session therapeutic in-terventions in pusher behaviour.” eng. In:Gait posture37.2 (2013), pages 246–250.issn: 1879-2219.url:http://search.proquest.com/docview/1282049046/.<br/>
 [7] L.B. Nascimento, A.C. De Paiva, and A.C. Silva. “Lung nodules classificationin CT images using Shannon and Simpson Diversity Indices and SVM”. In:volume 7376. 2012, pages 454–466.isbn: 9783642315367.<br/>
 [8] Hargrave, Marschall. 2019. “Deep Learning.” April 30. https://www.investopedia.com/terms/d/deep-learning.asp.<br/>
-<<<<<<< HEAD
-[9] Aravikumar, Meghan. 2018. "Let’s Talk Bayesian Optimization." November 16. https://mlconf.com/blog/lets-talk-bayesian-optimization/.
-=======
 [9] Aravikumar, Meghan. 2018. "Let’s Talk Bayesian Optimization." November 16. https://mlconf.com/blog/lets-talk-bayesian-optimization/.
->>>>>>> 0a3204a2fe89255ecd181c1dc11217dbd1950768
