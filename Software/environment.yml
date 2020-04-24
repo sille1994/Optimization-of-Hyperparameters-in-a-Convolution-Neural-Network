@@ -1,0 +1,19 @@
+name: /Users/CecilieAndre/Desktop/envs
+channels:
+  - pytorch
+  - defaults
+dependencies:
+  - autopep8
+  - pdoc3
+  - pylint
+  - pytest
+  - matplotlib
+  - pip
+  - jupyter
+  - pytorch=1.4.0=py3.8_0
+  - torchvision=0.5.0=py38_cpu
+  - pip:
+    - ax-platform==0.1.10
+    - botorch==0.2.2
+    - gpytorch==1.0.1
+prefix: /Users/CecilieAndre/Desktop/envs
