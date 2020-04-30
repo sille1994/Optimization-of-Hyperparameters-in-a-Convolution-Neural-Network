@@ -23,14 +23,14 @@ init:
 term:
 	rm -rf ./envs
 doc:
-	pdoc --html --html-dir ./Documentation --overwrite ./Hyperparameter_Optimization/Running_HO_on_CNN_doc.py
+	pdoc --html --html-dir ./Documentation --overwrite $(MODULENAME) 
 
 
 lint:
-	pylint --disable=no-member $(MODULENAME)
+	pylint $(MODULENAME)
 
 test:
-	python ./Hyperparameter_Optimization/test_Running_HO_on_CNN.py
+	pytest -v $(MODULENAME)
 
 runcode:
 	python ./Hyperparameter_Optimization/Running_HO_on_CNN.py

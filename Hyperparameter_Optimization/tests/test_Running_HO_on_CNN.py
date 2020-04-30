@@ -6,7 +6,7 @@
 import unittest
 import numpy as np
 from typing import Dict, List
-import Running_HO_on_CNN_unittest
+from Hyperparameter_Optimization import Running_HO_on_CNN_unittest
 
 
 class Parameters:
