@@ -1,4 +1,4 @@
-# CMSE802_spring2020_hyperparamterop
+# Optimization of Hyperparameters in a Convolution Neural Network 
 
 # Overview #
 
